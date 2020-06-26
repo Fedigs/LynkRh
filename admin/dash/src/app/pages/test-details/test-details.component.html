@@ -1,0 +1,148 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Tests</h4>
+                    </div>
+                    
+                    <div class="content">
+                            <div class="content all-icons">
+                            <div class="pull-right" style="margin-right:20px;">
+                                    <span style="cursor: pointer" (click)="questionModal()">Ajouter <i style="cursor: pointer" class="fa fa-plus"   > </i></span>
+                                  </div>
+                                                <div class="" style="margin-top:30px;">
+                                                        <div class="form-group">
+                                                          <label>Titre</label>
+                                                          <input type="text" class="form-control" [(ngModel)]="test.titre">
+                                                        </div>
+                                                      </div>
+                                                      <div class="row" *ngFor="let q of test.questions; let i= index">
+                                                            <div class="font-icon-list col-md-12">
+                                                                <div class="font-icon-detail" style="text-align: left; padding: 10px;">
+                                                                    <h3>{{q.titre}}</h3>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-11">
+                                                                            <table class="questions-details">
+                                                                                <tr><td><img src="../assets/img/icon/langage.jpg" alt=""></td><td><label style="color:black"> Langage</label></td>: {{q.langage?.nom}}<td></td></tr>
+                                                                                <tr><td><img src="../assets/img/icon/theme.jpg" alt=""></td><td><label style="color:black"> Thème</label></td><td>: {{q.theme?.nom}}</td></tr>
+                                                                                <tr><td><img src="../assets/img/icon/difficulté.jpg" alt=""></td><td><label style="color:black" > Difficulté</label></td><td>: {{q.difficulte}}</td></tr>
+                                                                                <tr><td><img src="../assets/img/icon/point.jpg" alt=""></td><td><label style="color:black"> Points</label></td><td>: {{q.score}}</td></tr>
+                                                                                <tr><td><img src="../assets/img/icon/durée.jpg" alt=""></td><td><label style="color:black" > Durée</label></td><td>: </td></tr>
+                                                                                <tr><td><img src="../assets/img/icon/description.jpg" alt=""></td><td><label style="color:black"> Description</label></td><td>: {{q.description}}<span style="font-size: 10px;"></span></td></tr>
+                                                                              </table>
+                                                                        </div>
+                                                                        <div class="col-sm-1 btn-vertical">
+                                                                            <div class="">
+                                                                                <button class="btn btn-success btn-block" (click)="reponseModal(q.id)"><i class="fa fa-eye"></i></button>
+                                                                            </div>
+                                                                            <div >
+                                                                                <button class="btn btn-primary btn-block" (click)="delete(i)"><i class="fa fa-trash-o"></i></button>
+                                                                            </div>
+                                                                            <div >
+                                                                                <button class="btn btn-warning btn-block" (click)="simuler(q)"><i class="fa fa-code"></i></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                            </div>
+                                                        </div>
+                                <div style="text-align:center; margin: 10px 0px 20px 0px">
+                                        <button class="btn btn-success btn-lg " (click)="sauvegarder()">Sauvegarder</button>
+                                      </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template #QuestionsListModal>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Questions</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <questions [mode]="mode" [(items)]="test.questions"></questions>
+         <!--  <app-questions  ></app-questions> -->
+          <div class="clearfix"></div>
+        </div>
+</template>
+        <!-- modal apour visualiser les réponses-->
+<template #repModal>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Réponses</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      <div class="modal-body">
+      <div class="col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Enoncé
+          </div>
+          <div class="panel-body" style="min-height: 200px;" [innerHTML]="question.enonce">
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            Réponses 
+          </div>
+          <div class="panel-body" style="min-height: 200px;">
+            <div *ngIf="question.typeQuestion=='QCM'">
+              <table>
+                <tr *ngFor="let r of question.reponses; let i=index">
+                  <td><label>{{i+1}}- </label></td>
+                  <td><label *ngIf="r.reponseBol" style="color: green"> {{r.titre}}</label><label *ngIf="r.reponseBol==false" style="color: red"> {{r.titre}}</label></td>
+                  <td><input type="checkbox" [(ngModel)]="r.reponseBol" [disabled]="true"></td>
+                </tr>
+              </table>
+            </div>
+            <div *ngIf="question.typeQuestion=='REPONSELIBRE'">
+                <table>
+                    <tr *ngFor="let r of question.reponses; let i=index">
+                      <td><label>{{i+1}}- </label></td>
+                      <td><label> {{r.reponseText}}</label></td>
+                    </tr>
+                  </table>
+            </div>
+            <div *ngIf="question.typeQuestion=='PROGRAMMATION'">
+              <pre>
+                {{question.reponses[0].reponseText}}
+              </pre>
+              <div class="form-inline">
+                <label>Informations supplémentaires </label>
+                <input type="checkbox" name="info" [(ngModel)]="info">
+              </div>
+              <div *ngIf="info">
+                <table>
+                  <tr>
+                    <td><label>Warnings :</label></td>
+                    <td>{{question.compileWarning}}</td>
+                  </tr>
+                  <tr>
+                    <td><label>Errors :</label></td>
+                    <td>{{question.compileErrors}}</td>
+                  </tr>
+                  <tr>
+                    <td><label>Résultats :</label></td>
+                    <td>{{question.compileResult}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+          <div class="clearfix"></div>
+        </div>
+</template>

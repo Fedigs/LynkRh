@@ -1,0 +1,300 @@
+<div class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#info" role="tab">Informations personnelles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#comp" role="tab">Compétences</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#cont" role="tab">Contrats</a>
+        </li>
+      </ul>
+    
+    <div class="tab-content">
+      <div id="info" class="tab-pane fade in active show">
+          <div class="row">
+              <div class="col-md-12">
+                  <ba-card  baCardClass="table-panel">
+                    <div class="alert alert-success" *ngIf="reponseInfoMaj.error==false">
+                      <i class="ion-checkmark"></i> Profil mis à jour
+                    </div>
+                    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+                    <div class="col-md-5" style="margin-bottom:10px">
+                        <div class="card-body">
+                            
+                            <ba-picture-uploader   (onUpload)="fileChange($event)"><div  class="picture-group">
+                      <div  class="picture-wrapper">
+                     <img src="assets/img/app/profile/Nasta.png">
+                  
+                      </div>
+                     <i class="ion-ios-close-outline"></i>
+                      <a  class="change-picture" href="">Changer votre photo</a>
+                      <input  hidden="true"  type="file">
+                    </div>
+                    </ba-picture-uploader>
+                          
+                        </div>
+                    </div>
+                      <div class="form-group"  [ngClass]="{'has-error': (!nom.valid && nom.touched), 'has-success': (nom.valid && nom.touched)}">
+                          <label for="input01">Nom</label>
+                          <input  [formControl]="nom" class="form-control" id="input01" placeholder="Nom" type="text">
+                        </div>
+                      <div class="form-group" [ngClass]="{'has-error': (!prenom.valid && prenom.touched), 'has-success': (prenom.valid && prenom.touched)}">
+                          <label for="input01">Prénom</label>
+                          <input  [formControl]="prenom" class="form-control" id="input01" placeholder="Prénom" type="text">
+                        </div>
+                      <div class="form-group" [ngClass]="{'has-error': (!adresse.valid && adresse.touched), 'has-success': (adresse.valid && adresse.touched)}">
+                          <label for="input01">Adresse</label>
+                          <input  [formControl]="adresse" class="form-control" id="input01" placeholder="Adresse" type="text">
+                          <div>
+<!--                               <ng2-completer  [formControl]="adresse" [placeholder]="'adresse'" [dropdownClass]="'col-md-12'" [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer>
+ -->                          </div>
+                        
+                        </div>
+                     <div>
+                        <div class="form-group" [ngClass]="{'has-error': (!tel.valid && tel.touched), 'has-success': (tel.valid && tel.touched)}">
+                            <label for="input01">Tel</label>
+                            <input  [formControl]="tel" class="form-control" id="input01" placeholder="Tel" type="text">
+                          </div>
+                        <div class="form-group" >
+                            <label for="input01">Nom d'utilisateur</label>
+                            <input  [formControl]="username"  class="form-control" id="input01" placeholder="Nom d'utilisateur" type="text" disabled>
+                          </div>
+                        <div class="form-group" [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}">
+                            <label for="input01">Email</label>
+                            <input  [formControl]="email" class="form-control" id="input01" placeholder="Email" type="text">
+                          </div>
+                        <div class="form-group" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+                            <label for="input01">Mot de passe</label>
+                            <input  [formControl]="password" class="form-control" id="input01" placeholder="Mot de passe" type="password">
+                          </div>
+                          <ba-card cardTitle="CV"  baCardClass="table-panel">
+                              <div class="form-group" >
+                                      <ba-file-uploader ></ba-file-uploader>
+                                      <label for="input01"><a [href]="service.downloadCvUrl" *ngIf="candidat.cvUrl">{{candidat.cvUrl}}</a>
+                                      <span *ngIf="candidat.cvUrl==undefined">Aucun cv</span>
+                                      </label>
+                                </div>
+                          </ba-card>
+                       
+                          <div class="pull-right">
+                            <button class="btn btn-primary" [disabled]="!form.valid" (click)="editerInfo()">Mettre à jour</button>
+                          </div>
+                     </div>
+                    </form>
+                  </ba-card>
+              </div>
+              <div class="col-md-2"></div>
+          </div>
+      </div>
+      <div id="comp" class="tab-pane fade">
+          <div class="row shift-up">
+              
+              <div class="col-md-12">
+                  <ba-card  cardTitle="COMPETENCES" baCardClass="table-panel">
+                      <div class="alert alert-success" *ngIf="reponseCompetenceMaj.error==false&&reponseCompetenceMaj.message.length>0">
+                          <i class="ion-checkmark"></i> {{reponseCompetenceMaj.message}}
+                        </div>
+                      <div class="alert alert-warning" *ngIf="reponseCompetenceMaj.error==true">
+                          <i class="ion-info"></i> {{reponseCompetenceMaj.message}}
+                        </div>
+                    <h4>LANGAGES</h4>
+                    <hr>
+                    <div class="" style="margin-bottom:15px;">
+                        <ng-select [items]="initValues.langages"
+                        bindLabel="nom"
+                        bindValue="" 
+                        [addTag]="true" 
+                        [multiple]="true"
+                        placeholder="Langage"
+                        (add)="onAdd($event)"
+                        (remove)="onRemove($event)"
+                        (change)="onChange($event)"
+                        [(ngModel)]="selectedLangagesIds">    
+                   </ng-select>  
+                      </div>
+                      <div class="alert alert-warning" *ngIf="selectedLangagesIds.length==0">
+                          Aucun langage dans vos compétences
+                        </div>
+                                           
+                    <table class="table">
+                      <tbody>
+                        <ng-container *ngFor="let l of selectedLangagesIds">
+                        <tr  >
+                          <td style="text-align: left; width: 20%" ><strong>{{l.nom}}</strong></td>
+                          <td style="padding:5px;"  >
+                              <label *ngIf="l.edit!=true">{{l.niveau.label}}</label>
+                            <select *ngIf="l.edit==true" class="form-control form-control-sm" name="experience" [(ngModel)]="l.niveau.id">
+                              <option disabled  value="">Aucun Niveau</option>
+                              <option *ngFor="let n of initValues.niveaux" [value]="n.id">{{n.label}}</option>
+                            </select>
+                          </td>
+                          <td style="padding:5px;" >
+                              <label *ngIf="l.edit!=true">{{l.experience.label}}</label>
+                              <select *ngIf="l.edit==true" class="form-control form-control-sm" name="experience" [(ngModel)]="l.experience.id">
+                                  <option disabled  value="">Aucune Expérience</option>
+                                  <option *ngFor="let e of initValues.experiences" [value]="e.id">{{e.label}}</option>
+                                </select>
+                          </td>
+                          <td style="text-align:right"><i class="fa fa-pencil" style="margin-right: 10px;cursor: pointer" *ngIf="l.edit!=true" (click)="setEditMode(l,true,'','')"></i>
+                            <i class="ion-checkmark" style="margin-right: 10px;cursor: pointer" *ngIf="l.edit==true" (click)="setEditMode(l,false,l.experience.id,l.niveau.id)"></i>
+                            </td>
+                        </tr>
+                      </ng-container>
+                      </tbody>
+                    </table>
+                 <hr>
+                 <h4>FRAMEWORK</h4>
+                 <hr>
+                 <div class="" style="margin-bottom:15px;">
+                  <ng-select [items]="initValues.frameworks"
+                  bindLabel="nom"
+                  bindValue="" 
+                  [addTag]="true" 
+                  [multiple]="true"
+                  placeholder="Framework"
+                  (add)="onAdd($event)"
+                  (remove)="onRemove($event)"
+                  (change)="onChange($event)"
+                  [(ngModel)]="selectedFrameworksIds">    
+             </ng-select>
+                       
+                    </div>
+                      <div class="alert alert-warning" *ngIf="selectedFrameworksIds.length==0">
+                          Aucun framework dans vos compétences
+                        </div>
+                        <table class="table">
+                            <tbody>
+                                <ng-container *ngFor="let f of selectedFrameworksIds">
+                              <tr >
+                                <td style="text-align: left; width: 20%" ><strong>{{f.framework.nom}}</strong></td>
+                                <td style="padding:5px;">
+                                    <label *ngIf="f.edit!=true">{{f.niveau.label}}</label>
+                                  <select *ngIf="f.edit==true" class="form-control form-control-sm" name="niveau" [(ngModel)]="f.niveau.id">
+                                    <option disabled  value="">Aucun Niveau</option>
+                                    <option *ngFor="let n of initValues.niveaux" [value]="n.id">{{n.label}}</option>
+                                  </select>
+                                </td>
+                                <td style="padding:5px;" >
+                                    <label *ngIf="f.edit!=true">{{f.experience.label}}</label>
+                                    <select *ngIf="f.edit==true" class="form-control form-control-sm" name="experience" [(ngModel)]="f.experience.id">
+                                        <option disabled value="">Aucune Expérience</option>
+                                        <option *ngFor="let e of initValues.experiences" [value]="e.id">{{e.label}}</option>
+                                      </select>
+                                </td>
+                                <td style="text-align:right"><i class="fa fa-pencil" style="margin-right: 10px;cursor: pointer" *ngIf="f.edit!=true" (click)="setEditMode(f,true,'','')"></i>
+                                  <i class="ion-checkmark" style="margin-right: 10px;cursor: pointer" *ngIf="f.edit==true" (click)="setEditMode(f,false,f.experience.id,f.niveau.id)"></i>
+                              </tr>
+                                </ng-container>
+                            </tbody>
+                          </table>
+                          <div class="pull-right">
+                            <button class="btn btn-primary" (click)="editerCompetence()">Mettre à jour</button>
+                          </div>
+                  </ba-card>
+              </div>
+          </div>
+      </div>
+      <div id="cont" class="tab-pane fade">
+        <div class="row">
+            <div class="col-md-12 " >
+              <div class="row shift-up">
+                  <ba-card class=" col-md-12 col-sm-12 col-12" cardTitle="CONTRAT"
+                           baCardClass="table-panel">
+                           <div class="alert alert-success" *ngIf="reponseContratMaj.error==false&&reponseContratMaj.message.length>0">
+                              <i class="ion-checkmark"></i> {{reponseContratMaj.message}}
+                            </div>
+                          <div class="alert alert-warning" *ngIf="reponseContratMaj.error==true">
+                              <i class="ion-info"></i> {{reponseContratMaj.message}}
+                            </div>
+                           <div class="alert alert-info">
+                             <p><i class="fa fa-info"></i>
+                             Sélectionnez autant de type de contrat que vous désirez et si votre cv est accepté par un recruteur il vous indiquera le type de contrat qu'il lui convient.
+                            </p>
+                             
+                           </div>
+                           <h4><input type="checkbox" class="checkbox" name="autreContrat" [(ngModel)]="autreContrat"> Type salarié</h4>
+                           <hr>
+                          <div style="margin-left:20px" *ngIf="autreContrat==true">
+                              <div class="form-inline">
+                                  <ba-checkbox *ngFor="let c of typeContrat" [(ngModel)]="c.checked" [label]="c.nom" ></ba-checkbox>
+                                </div>
+                               <div>
+                                  <div class="form-group">
+                                      <label for="input02">Salaire Mensuel</label>
+                                      <input class="form-control"  name="salaireMensuel" [(ngModel)]="salaireMensuel"  id="input02" placeholder="salaire" type="text">
+                                    </div>
+                                  <div class="form-group">
+                                      <label for="input03">Date de disponibilité</label>
+                                      <my-date-picker name="mydate" [options]="myDatePickerOptions" (dateChanged)="onModelDate1Changed($event)"
+                                      [(ngModel)]="modelDate1" required></my-date-picker>
+                                    </div>
+                              </div>
+                          </div>
+                          <hr>
+                          <h4><input type="checkbox" class="checkbox" name="freelance" [(ngModel)]="freelance"> Type Freelance</h4>
+                          <hr>
+                          <div style="margin-left:20px" *ngIf="freelance==true"> 
+                          <h5>Type de freelance</h5>
+                          <div class="form-inline" style="margin-top:10px; margin-bottom:10px">
+                             <div class="radio " *ngFor="let tf of typeFreelance">
+                                 <label class="custom-radio nowrap">
+                                   <input type="radio" name="optionsRadios" [value]="tf" [(ngModel)]="tpeFreelance">
+                                   <span>{{tf}}</span>
+                                 </label>
+                               </div>
+                          </div>
+                         <div class="form-group">
+                             <label for="input02">Salaire Journalier</label>
+                             <input class="form-control" id="input02" name="salaireJournalaire" [(ngModel)]="salaireJournalier" placeholder="salaire"  type="text">
+                           </div>
+                         <div class="form-group">
+                             <label for="input03">Date de disponibilité</label>
+                             <my-date-picker name="mydate" [options]="myDatePickerOptions" (dateChanged)="onModelDate2Changed($event)"
+                             [(ngModel)]="modelDate2" required></my-date-picker>
+                           </div>
+                           <label>Lieu de travail</label>
+                         <div class="form-inline">
+                           
+                            <div class="radio" *ngFor="let lt of lieuxTravail">
+                                <label class="custom-radio nowrap">
+                                  <input type="radio" name="optionsRadios1" id="optionsRadios3" [value]="lt"  [(ngModel)]="lieuTravail">
+                                  <span>{{lt}}</span>
+                                </label>
+                              </div>
+                           </div>
+                          </div>
+                          <hr>
+                          <h4><input type="checkbox" class="checkbox" name="stage" [(ngModel)]="stage"> Stage</h4>
+                          <hr>
+                          <div style="margin-left:20px" *ngIf="stage==true">
+                          <div class="form-group">
+                              <label for="input04">Date de début</label>
+                              <my-date-picker name="mydate" [options]="myDatePickerOptions" (dateChanged)="onModelDate3Changed($event)"
+                              [(ngModel)]="modelDate3" required></my-date-picker>
+                            </div>
+                            <div class="form-group">
+                                <label for="input05">Durée (mois)</label>
+                                <input class="form-control" id="input05"  name="nbMois" [(ngModel)]="nbMois" placeholder="durée" type="number">
+                              </div>
+                          </div>
+                          <div class="pull-right">
+                            <button class="btn btn-primary" (click)="editerContrat()">Mettre à jour</button>
+                          </div>
+
+                  </ba-card>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+    <div class="col-md-2">
+      </div>
+</div>
+
+

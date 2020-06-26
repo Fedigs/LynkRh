@@ -1,0 +1,13 @@
+
+<div style="position:relative">
+      <input class="form-control"  placeholder="" [(ngModel)]="searchText"  (focus)="onFocus()">
+      <div>
+        <ul id="ul-list" *ngIf="showDropdown">
+          <li *ngFor="let i of items | filter : {nom:searchText}" (click)="selectedItem(i)">{{i.nom}}</li>
+          <li *ngIf="(items | filter : {nom:searchText}).length==0&&createAction==true" (click)="createItem()">
+            <div><i style="color:#ccc; font-size:10px;">Aucun résultat</i></div>
+            <i>Crée </i> {{searchText}}
+          </li>
+        </ul>
+      </div>
+</div>

@@ -1,0 +1,96 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Simulation</h4>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                                <div style="margin: 15px; font-size: 15px">
+                                        <label>Durée totale : {{question.duree}}</label>
+                                        <label>Durée écoulée : {{tempsEcoule}}</label>
+                                      </div>
+                                      <div>
+                                        <div class="col-md-6">
+                                          <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                              Enoncé
+                                            </div>
+                                            <div class="panel-body">
+                                                Enoncé ici
+                                              </div>
+                                          </div>
+                                        </div>
+                                    
+                                        <div class="col-md-6">
+                                            <div>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                      Reponses
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div *ngIf="question.typeQuestion=='PROGRAMMATION'">
+                                                            <div ace-editor
+                                                            [(text)]="reponses[0].reponseText"
+                                                            [mode]="'sql'" 
+                                                            [theme]="'eclipse'"
+                                                            [options]="options"
+                                                            [readOnly]="end"
+                                                            [autoUpdateContent]="true" 
+                                                            [durationBeforeCallback]="1000" 
+                                                            (textChanged)="onChange($event)"
+                                                            style="min-height: 200px; width:100%; overflow: auto; "></div>
+                                                        </div>
+                                                        <div *ngIf="question.typeQuestion=='QCM'">
+                                                          <div class="form-inline" *ngFor="let r of reponses;let i= index">
+                                                            <label>{{r.titre}} </label><input class="form-control" [disabled]="end" type="checkbox" name= "reponse" [(ngModel)]="reponses[i].reponseBol">
+                                                          </div>
+                                                        </div>
+                                                        <div *ngIf="question.typeQuestion=='REPONSELIBRE'">
+                                                          <div class="form-group">
+                                                            <textarea class="form-control" name="reponse" [disabled]="end" [(ngModel)]="reponses[0].reponseText"></textarea>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                  </div>
+                                                  <div>
+                                                    <button class="btn btn-sm btn-success" (click)="send()" [disabled]="end">Valider</button>
+                                                  </div>
+                                            </div>
+                                    
+                                            <div>
+                                                <div class="panel panel-default" *ngIf="question.typeQuestion=='PROGRAMMATION'">
+                                                    <div class="panel-heading">
+                                                      Result
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="">
+                                                            <p><label >Outputs attendus</label></p>
+                                                            <div>
+                                                            <p><b>Errors :</b> </p>
+                                                            <p><b>Warnings :</b> </p>
+                                                            <p><b>Result :</b> </p>
+                                                            </div>
+                                                         </div>
+                                                         <div class="">
+                                                            <p><label >Outputs de la réponse</label></p>
+                                                            <div>
+                                                            <p><label>Errors :</label> </p>
+                                                            <p><label>Warnings :</label> </p>
+                                                            <p><label>Result :</label></p>
+                                                            </div>
+                                                         </div>
+                                                      </div>
+                                                  </div>
+                                            </div>
+                                          </div>
+                                      </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

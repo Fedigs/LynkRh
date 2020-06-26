@@ -1,0 +1,86 @@
+<!-- <div class="main-content">
+    <div class="container-fluid" style="margin-top:50px;">
+        <div  class="col-sm-4 col-sm-offset-4">
+            <div  class="form-group">
+                <label>Login</label>
+                <input  class="form-control" placeholder="Username" type="text" name="username" [(ngModel)]="credentials.username">
+            </div>
+            <div  class="form-group">
+                <label>Password</label>
+                <input  class="form-control" placeholder="password" type="password" name="password" [(ngModel)]="credentials.password">
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-success" (click)="login()">Login</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="login-page">
+    
+    <div class="form" >
+        <div class="logo-img">
+            <img src="/assets/img/logo.png" style="margin-bottom: 30px;width:170px">
+        </div>
+        <form class="login-form">
+            <div class="alert alert-warning" *ngIf="auth.rep==false">
+                {{auth.message}}
+            </div>
+            <div class="alert alert-danger" *ngIf="auth.rep==-1">
+                {{auth.message}}
+            </div>
+            <div class="form-group">
+                <label>Nom d'utilisateur</label>
+                <input class="form-control" placeholder="Nom d'utilisateur" type="text" name="username" [(ngModel)]="credentials.username">
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input class="form-control" placeholder="password" type="password" name="password" [(ngModel)]="credentials.password">
+            </div>
+            <button (click)="login()">login</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- <div class="wrapper wrapper-full-page">
+    <div class="full-page login-page" data-color="red" data-image="../../../assets/img/full-screen-image-1.jpg">
+        <div class="content" style="margin-top:50px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                        <form action="#" method="#" novalidate="" class="ng-untouched ng-pristine ng-valid">
+
+                        
+                            <div class="card">
+                                <div class="header text-center">Login</div>
+                                <div class="content">
+                                        <div class="alert alert-warning" *ngIf="auth.rep==false">
+                                                {{auth.message}}
+                                              </div>
+                                              <div class="alert alert-danger" *ngIf="auth.rep==-1">
+                                                {{auth.message}}
+                                              </div>
+                                    <div class="form-group">
+                                        <label>Nom d'utilisateur</label>
+                                        <input class="form-control" placeholder="Nom d'utilisateur" type="text" name="username" [(ngModel)]="credentials.username">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mot de passe</label>
+                                        <input class="form-control" placeholder="password" type="password" name="password" [(ngModel)]="credentials.password">
+                                    </div>
+                                   
+                                </div>
+                                <div class="footer text-center">
+                                    <button class="btn btn-fill btn-danger btn-wd" type="submit" (click)="login()">Login</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="full-page-background" style="background-image: url(../../../assets/img/full-screen-image-1.jpg) "></div></div>
+</div> -->

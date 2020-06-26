@@ -1,0 +1,308 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Liste des candidats invités pour l'offre {{ offreTitre }}</h4>
+                        <p class="category"></p>
+                    </div>
+                    <div class="fixed-bottom" style="padding-left:800px;padding-right:20px; margin-bottom:60px">
+                        <select class="form-control pull-right" #action (change)="filter(action.value)">
+                            <option value="0"> Tous</option>
+                            <option value="1"> Accepté</option>
+                            <option value="2"> Non Accepté</option>
+                        </select>
+                    </div>    
+                    <div class="content table-responsive table-full-width">
+                          <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let cell of tableData1.headerRow">{{ cell }}</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody>
+                                    <tr *ngIf="tabload">
+                                        <td colspan="8"><app-load></app-load></td>
+                                    </tr>
+                                    <tr *ngFor="let row of dataRows">
+                                        <td>{{row.id.candidat.username}}</td>
+                                        <td>{{row.id.candidat.nom}}</td>
+                                        <td>{{row.id.candidat.prenom}}</td>
+                                        <td>{{row.id.candidat.email}}</td>
+                                        <td> <button class="btn btn-xs btn-default btn-fill" [disabled]='!row.verif' (click)="openInviterEntretienPreliminaire(row);"><i class="fa fa-envelope" style="cursor: pointer"></i></button>
+                                          <button class="btn btn-xs btn-default btn-fill" (click)="selectedCandidat(row.id.candidat.username);"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                                          <button class="btn btn-xs btn-default btn-fill" [disabled]='!row.verif' (click)="resultat(row.id.candidat.username); username = row.id.candidat.username" ><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                                        </td>
+                                        <td>
+                                            <span class="label label-success" *ngIf="row.invite">invité</span>
+                                            <span class="label label-danger" *ngIf="!row.invite">non invité</span>
+                                            <div *ngIf="(disInv==true)&&(entretien.candidat==row.id.candidat)" style="max-width: 20px;"><app-load></app-load></div>
+                                        </td>
+                                        <td>
+                                            <span class="label label-success" *ngIf="row.id.candidat.accepte" >accepté</span>
+                                            <span class="label label-danger" *ngIf="!row.id.candidat.accepte" >non accepté</span> 
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="checkedCandidat" name="checkedCandidat" [disabled]="(row.checked==true)" [(ngModel)]="row.isChecked" (ngModelChange)="test($event)">
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                          </table>
+                        <div style="text-align:center" *ngIf="pages.length>0">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item" *ngIf="testpage.first==false">
+                                        <a class="page-link" aria-label="Previous" (click)="paginate('p')">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" *ngFor="let p of pages; let i=index" [ngClass]="{'disabled active':pageCourant==i}">
+                                        <a class="page-link" (click)="paginate(i)">{{i+1}}</a>
+                                    </li>
+                                    <li class="page-item" *ngIf="testpage.last==false">
+                                        <a class="page-link" aria-label="Next" (click)="paginate('n')">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="fixed-bottom" style="padding:30px; margin-bottom:20px">
+                            <div *ngIf="dis==true"><app-load></app-load></div>  
+                            <button type="button" class="btn btn-success btn-fill pull-right" [disabled]="dis" (click)="envoyerEntreprise()">Envoyer à l'entreprise</button>
+                        </div> 
+                    </div>
+                    
+                       
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+              <div class="card" style="padding:0% 20%">
+                <fusioncharts
+                [width]="width"
+                [height]="height"
+                [type]="type"
+                [dataFormat]="dataFormat"
+                [dataSource]="dataSource" style="padding-left:190px"> 
+                </fusioncharts>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<template #correctionModal>
+    <div class="modal-header">
+            <button type="button pull-right" style="margin:10px;cursor:pointer" class="close"  (click)="modalRef.hide()">&times;</button>
+            <h4 class="modal-title pull-left">Correction</h4>
+    </div>
+    <div *ngIf="verif1" class="correction">
+        <div *ngFor="let r of reponses">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <td>
+                    <div class="jumbotron" [innerHTML]="r.question.enonce">
+                    </div>   
+                    <div class="col-md-6">
+                    <div class="card">
+                        <div class="header">Réponses entendues</div>
+                        <div class="content">
+                            <div *ngIf="r.type=='QCM'">
+                                <div *ngFor="let proj of r.candReponseProjection">
+                                    <div class="form-inline">
+                                        <input type="checkbox" disabled [(ngModel)]="proj.reponse.reponseBol">
+                                        <label>{{proj.reponse.titre}}</label>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="r.type=='REPONSELIBRE'">
+                                    <div *ngFor="let proj of r.candReponseProjection">
+                                        <p>{{proj.reponse.reponseText}}</p>
+                                    </div>
+                                </div>
+                            <div *ngIf="r.type=='PROGRAMMATION'">
+                                        <pre style="overflow: auto;">{{r.candReponseProjection[0].reponse.reponseText}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                    </div>    
+                    <div class="col-md-6">
+                            <div class="card">
+                                    <div class="header">Réponses du candidat</div>
+                                    <div class="content">
+                                            <div *ngIf="r.type=='QCM'">
+                                                    <div *ngFor="let proj of r.candReponseProjection">
+                                                        <div class="form-inline">
+                                                            <input type="checkbox" disabled [(ngModel)]="proj.candReponseItem.reponseBol">
+                                                            <label>{{proj.reponse.titre}}</label>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="r.type=='REPONSELIBRE'">
+                                                        <label>{{r.candReponseProjection[0].reponse.reponseText}}</label>
+                                            </div>
+                                                <div *ngIf="r.type=='PROGRAMMATION'">
+                                                        <pre style="overflow: auto;">{{r.candReponseProjection[0].candReponseItem.reponseText}}</pre>
+                                            </div>
+                                    </div>
+                                </div>    
+                    </div>    
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="label label-default">Durée estimée :{{r.question.duree}}</span>
+                            <span class="label label-primary">Points  :{{r.question.score}}</span>
+                            <span class="label label-success" *ngIf="r.question.difficulte=='FACILE'">DIFFICULTE: {{r.question.difficulte}}</span>
+                            <span class="label label-warning" *ngIf="r.question.difficulte=='MOYEN'">DIFFICULTE: {{r.question.difficulte}}</span>
+                            <span class="label label-danger" *ngIf="r.question.difficulte=='DIFFICILE'">DIFFICULTE: {{r.question.difficulte}}</span>
+                            <div class="pull-right">
+                                <div>
+                                        <span class="label label-default">Durée de la réponse : {{r.duree}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Score attribué</label>
+                                    <input class="form-control" type="number" [disabled]="r.candReponseProjection[0].candReponseItem.correcte==false" name="score" [(ngModel)]="r.candReponseProjection[0].candReponseItem.score" (change)="r.candReponseProjection[0].candReponseItem.checked=1">
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div style="text-align:center">
+                                    <label>Correcte</label>
+                                    <input type="checkbox" class="" #checked  name="correcte" [(ngModel)]="r.candReponseProjection[0].candReponseItem.correcte" (change)="r.candReponseProjection[0].candReponseItem.checked=1">
+                            </div>
+                            <div style="text-align:center">
+                                <button class="btn btn-default btn-fill" *ngIf="r.candReponseProjection[0].candReponseItem.checked==1"  (click)="setCorrection(r.candReponseProjection[0].candReponseItem.id,r.candReponseProjection[0].candReponseItem.correcte,r.candReponseProjection[0].candReponseItem.score)">Valider</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="!verif1" >
+        <div class="container">
+            <div class="row">
+                <article class="template animated bounceIn" style="margin-left:27%;margin-top:8%;margin-bottom:0%">
+                        <img src="../../../assets/img/48_error_page_not_found_bug_maintenance-256.png" class="img-circle img-responsive" alt="">
+                        
+                </article>
+                <!-- <div class="alert alert-danger" style="margin-left:0%;margin-top:0px;margin-bottom:5%" role="alert">Le Candidat n'a pas encore passer le test</div> -->
+               
+                <article class="template animated flash" style="margin-left:22.9%;margin-top:0px;margin-bottom:5%">
+                        <h4>Le Candidat n'a pas encore passer le test</h4>
+                </article>
+                    
+            </div>
+        </div>
+    </div>
+   
+    <!--<div *ngIf="type=='resultat'">
+        <app-resultats [score]="reponses"></app-resultats>
+    </div> -->
+
+
+</template>
+
+<!-- les resultats des candidats -->
+<template #resultatModal>
+    <div class="modal-header">
+        <button type="button pull-right" style="margin:10px;cursor:pointer" class="close"  (click)="modalRef.hide();onClicked(false)">&times;</button>
+        <h4 class="modal-title pull-left">Resultat du Test</h4>
+    </div>
+    <div>
+        <div class="row" style="margin-left:150px;">
+            <app-resultats [score]="reponses" [username]="username" (clicked)='onClicked($event)' ></app-resultats>
+        </div>
+        <div class="row"   style="margin-left:1px;margin-right:3px">
+            <app-details-resultat *ngIf="clicked" [clicked]="clicked" [username]="username"></app-details-resultat>
+        </div>
+    </div>
+</template>
+
+<template #envoyerInvitation>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Envoyer une invitation</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-warning" *ngIf="affiError">
+            Il est necessaire de Remplir tout les champs
+        </div>
+        <div class="form-group">
+            <label>Lieu</label>
+            <ng-select [items]="initValues" [multiple]="false"  style="z-index:1002;"
+                       bindLabel="nom"
+                       bindValue="id"
+                       placeholder="Lieu"
+                       [(ngModel)]="selectedLieuxId">
+            </ng-select>  
+        </div>
+        <!-- <div class="input-group">
+            <label>Date</label>
+            <input class="form-control" style="float:none" placeholder="chercher pour une date" ngx-mydatepicker name="mydate"
+                   [(ngModel)]="date" [options]="myOptions"  #dp="ngx-mydatepicker"  (dateChanged)="onDateChanged($event)"/>
+            
+            <span class="input-group-btn" style="padding-top:25px">
+                <button type="button" class="btn btn-default" (click)="dp.clearDate()">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+                <button type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>    -->
+        <div class="input-group">
+                <label>Date</label>
+                <input
+                class="form-control"
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                #dpFull="bsDatepicker"
+                placeholder="chercher pour une date"
+                [(ngModel)]="date"
+                bsDatepicker
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD, h:mm:ss a' }"
+               >
+            <span class="input-group-btn" style="padding-top:25px">
+                    <button type="button" class="btn btn-default" (click)="clearDate(dpFull)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" (click)="openCal(dpFull)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>   
+        </div>
+        <div class="form-group">
+            <label>message</label>
+            <textarea  class="form-control" name="nom" [(ngModel)]="entretien.message"></textarea>
+        </div>
+      <div class="clearfix"></div>
+    </div>
+
+    
+    <div class="modal-footer">
+        <button class="btn btn-success " (click)="inviter()">Envoyer</button>
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()">Annuler</button>
+    </div>
+</template>

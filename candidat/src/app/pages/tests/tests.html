@@ -1,0 +1,67 @@
+<ba-card cardTitle="Tests" baCardClass="with-scroll table-panel">
+  <table class="table table-striped table-bordered">
+    <thead>
+        <td>Titre de l'offre</td>
+        <td>Test technique</td>
+        <td>Actions</td>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of invitations">
+        <td>{{i.id.offre.titre}}</td>
+        <td>
+            <span class="badge badge-success" *ngIf="i.start==false">Nouveau</span>
+            <span class="badge badge-warning" *ngIf="i.start==true">Terminé</span>
+        </td>
+        <td>
+          <button class="btn btn-default"  data-toggle="modal" data-target="#infoModal" (click)="viewInvitation(i)" ><i class="fa fa-info" ></i></button>
+          <button class="btn btn-default"  data-toggle="modal" data-target="#testModal"  (click)="startTest(i)" data-backdrop="static" data-keyboard="false"><i class="fa fa-play"></i></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ba-card>
+
+<!-- Modal -->
+<div id="infoModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <h4 class="modal-title">Details de l'offre</h4>
+        <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          <i class="fa fa-building"></i> <label>{{clickedInvitation?.id?.offre?.proprietaire?.nom}}</label>
+        </p>
+        <p>
+          <i class="fa fa-map-marker"></i> <label>{{clickedInvitation?.id?.offre?.proprietaire?.adresse}}</label>
+        </p>
+            <h2>Type de contrat</h2>
+            <label *ngFor="let c of  clickedInvitation?.id?.offre?.contrats" class="label" [ngClass]="{'label-success':c.nom=='CDD','label-primary':c.nom=='CDI','label-danger':c.nom=='STAGE','label-warning':c.nom=='SVIP1','label-default':c.nom=='SVIP2'}">{{c.nom}}</label>
+          <h2>Compétences</h2>
+          <ul style="margin-left:20px;"class="list-unstyled">
+            <li>Langages
+              <ul>
+                <li *ngFor="let l of clickedInvitation?.id?.offre?.langages">{{l.nom}}</li>
+              </ul>
+            </li>
+            <li>Frameworks
+              <ul>
+                  <li *ngFor="let f of clickedInvitation?.id?.offre?.frameworks">{{f.nom}}</li>
+              </ul>
+            </li>
+          </ul>
+          <p [innerHTML]="clickedInvitation?.id?.offre?.description">
+
+          </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+
+  </div>
+</div>

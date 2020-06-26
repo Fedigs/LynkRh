@@ -1,0 +1,84 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Compétences</h4>
+                    </div>
+                    <div class="content">
+                           <div class="row">
+                               <div class="form-igroup col-sm-4">
+                                   <label>Nom </label>
+                                   <input type="text" class="form-control"  name="nom" [(ngModel)]="competence.nom">
+                               </div>
+                               <div class="form-group col-sm-4">
+                                   <label>Type </label>
+                                   <select name="type" [(ngModel)]="competence.type" class="form-control">
+                                       <option>Langage</option>
+                                       <option>Framework</option>
+                                   </select>
+                               </div>
+                               <div class="form-group">
+                                    <button class="btn btn-success" style="margin-top:25px;" (click)="creer()"> créer</button>
+                               </div>
+                           </div>
+                            <div>
+                                <div class="pull-right" style="padding: 10px;">
+                                    <select class="form-control" name="filtre" [(ngModel)]="filtre" (change)="filtrer()">
+                                        <option>Tous</option>
+                                        <option value='framework'>Frameworks</option>
+                                        <option value='langage'>Langages</option>
+                                    </select>
+                                </div>
+                                <table class="table table-bordered table-striped" style="margin-top:25px;font-size:13px; ">
+                                    <thead>
+                                      <tr>
+                                          <th>Nom</th>
+                                          <th>Type</th>
+                                          <th>Actions</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let c of competences">
+                                            <td>{{c.nom}}</td>
+                                            <td>{{c.type}}</td>
+                                            <td>
+                                              <button class="btn btn-success btn-xs" (click)="editModal(c)"><i class="fa fa-pencil"></i></button>
+                                              <button class="btn btn-danger btn-xs" (click)="openDeleteModal(c)"><i class="fa fa-trash-o"></i></button>
+                                            </td>
+                                        </tr>
+                                      </tbody>
+                                  </table>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template #competenceModal>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Edition</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Nom</label>
+                <input type="text" class="form-control" name="nom" [(ngModel)]="competenceEdit.nom">
+            </div>
+            <div class="form-group">
+                    <label>Description</label>
+                    <textarea  class="form-control" name="nom" [(ngModel)]="competenceEdit.description"></textarea>
+                </div>
+
+         <!--  <app-questions  ></app-questions> -->
+          <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+                <button class="btn btn-success " (click)="editer()">Editer</button>
+              <button type="button" class="btn btn-default" (click)="modalRef.hide()">Annuler</button>
+            </div>
+</template>

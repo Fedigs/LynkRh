@@ -1,0 +1,12 @@
+.modal-dialog1 {
+    width: 100% !important;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .modal-content1 {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+  }

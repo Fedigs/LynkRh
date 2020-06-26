@@ -1,0 +1,105 @@
+<!--
+  Generated template for the RhlynkOffreDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="secondary">
+    <ion-title>Offre Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content parallax-header no-bounce class="bg-modal">
+    <div class="header-image">
+        <div align="center" class="profile">
+            <ion-icon ios="ios-albums" md="md-albums" item-start></ion-icon>
+            <h4> Offre</h4>
+        </div>
+    </div>
+    <div class="main-content" text-wrap text-center>
+        <!-- <div class="circular"></div> -->
+        <h2>{{ offre.titre }}</h2>
+        <p>{{ offre.proprietaire.username }} &bull; {{ offre.createAt }}</p>
+        <div class="profile-description">
+          <p [innerHTML]="offre.description"></p>
+        </div>
+        <hr>
+        <ion-list no-lines>
+            <ion-item>
+                <!-- <a button ion-button (click)="goToCvAnonymes()" color="primary" item-start medium> <ion-icon name="eye"></ion-icon> CvAnonymes</a>
+                <a button ion-button color="primary" item-end medium><ion-icon name="create"></ion-icon>  Editer </a> -->
+              <button ion-button (click)="goToCvAnonymes()" round block >
+                <ion-icon name="list"></ion-icon>
+                Candidats Invités
+              </button>
+            </ion-item>
+            <ion-item>
+              <button ion-button color="secondary" (click)="goToEditerOffre()" round block>
+                <ion-icon name="create" style="margin-right:15px"></ion-icon>
+                Editer
+              </button>
+            </ion-item>
+            <ion-item>
+              <button ion-button color="danger" round block>
+                <ion-icon name="md-trash" style="margin-right:10px"></ion-icon>
+                Supprimer
+              </button>
+            </ion-item>
+            <!-- <ion-item>
+                <ion-icon name="mail" color="primary" item-start></ion-icon>
+                <p>Editer l'offre</p>
+                <a button ion-button color="primary" item-end medium><ion-icon name="create"></ion-icon>  Editer </a>
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="call" color="danger"></ion-icon>
+                <p>Mobile</p>
+                {{user.phone}}
+                <a button ion-button href="tel:{{user.phone}}" color="danger" item-end medium>Poke me</a>
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="logo-whatsapp" color="secondary"></ion-icon>
+                <p>Whatsapp</p>
+                {{user.whatsapp}}
+                <a button ion-button color="secondary" item-end medium href="whatsapp://send?text=Hi from ionic&phone=+{{user.phone}}&abid=+{{user.phone}}">Open App</a>
+            </ion-item>
+            <ion-item>
+                <ion-icon item-start name="pin" color="twitter"></ion-icon>
+                <p>{{user.address}}</p>
+            </ion-item> -->
+        </ion-list>
+    </div>
+
+</ion-content>
+<!-- <ion-content padding>
+
+  <ion-list>
+      <ion-item-sliding *ngFor="let invitation of invitations">
+          <ion-item>
+            <ion-avatar item-start>
+                <ion-icon class="profile" name="ios-contact"></ion-icon>
+            </ion-avatar>
+            <h2>{{ invitation.id.candidat.nom }} {{ invitation.id.candidat.prenom }}</h2>
+            <p>{{ invitation.id.candidat.username }} • {{ invitation.id.candidat.type }}</p>
+          </ion-item>
+          <ion-item-options side="left">
+            <button ion-button color="primary">
+              <ion-icon name="text"></ion-icon>
+              Text
+            </button>
+            <button ion-button color="secondary">
+              <ion-icon name="call"></ion-icon>
+              Call
+            </button>
+          </ion-item-options>
+          <ion-item-options side="right">
+            <button ion-button color="primary" (click)="goToCvAnonymes()">
+              <ion-icon name="mail"></ion-icon>
+              Email
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+  </ion-list>
+</ion-content> -->

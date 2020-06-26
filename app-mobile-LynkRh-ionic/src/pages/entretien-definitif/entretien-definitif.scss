@@ -1,0 +1,37 @@
+page-entretien-definitif {
+  .profile{
+    margin-top:0px;
+    padding-top: 40px;
+    padding-bottom: 30px;
+    background-color: color($colors,secondary);
+    color:white;
+  }
+  .main-content {
+    margin-top: -10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 20px;
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 55px -16px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 55px -16px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 55px -16px rgba(0, 0, 0, 0.75);
+    // background: #F5F5F5;
+    position: relative !important;
+}
+
+}
+ion-spinner {
+  padding-left:30px;
+  .spinner-dots circle   {
+    stroke: white;
+  }
+
+  &.spinner-dots circle  {
+
+    fill: white;
+  }
+}
+// ion-spinner * {
+//   stroke: white;
+//   fill: white;
+// }

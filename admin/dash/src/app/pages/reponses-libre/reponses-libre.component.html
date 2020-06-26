@@ -1,0 +1,7 @@
+<div class="input-group" *ngFor="let item of items; let i=index">
+  <input type="hidden"   name="id" [(ngModel)]="item.id">
+  <input type="text"  class="form-control" name="reponseText" [(ngModel)]="item.reponseText">
+  <div class="input-group-btn">
+    <button class="btn btn-danger" type="submit" (click)="delete(i)"><i class="fa fa-trash-o"></i></button>
+  </div>
+</div>

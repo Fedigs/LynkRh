@@ -1,0 +1,92 @@
+<!--
+  Generated template for the CvAnonymeDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+
+  <ion-navbar color="secondary">
+    <ion-title>cv-anonyme</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="closemodal()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content class="container transparent-header">
+
+  <div class="card-profile" style="margin-top:0px">
+      <div align="center" class="profile">
+
+          <h1>CV Anonyme</h1>
+          <ion-icon class="profile-image" name="ios-contact"></ion-icon>
+            <h4>{{ candidat.nom }}, {{ candidat.prenom }}</h4>
+      </div>
+      <h3 class="title-head" color="danger"> Les Contrats </h3>
+      <hr style="margin:15px;margin-top:10px;">
+      <div>
+        <ion-card>
+          <button *ngFor="let contrat of candidat.contrats" ion-button color="secondary" small>{{ contrat.typeContrat.nom }}</button>
+        </ion-card>
+      </div>
+      <h3 class="title-head" color="danger"> Les Competences </h3>
+      <hr style="margin:15px;margin-top:10px;">
+      <div *ngFor="let competence of candidat.competences">
+        <ion-card *ngIf="competence.framework != null" >
+          <ion-card-header>
+            {{ competence.framework.nom }}
+          </ion-card-header>
+          <ion-card-content *ngIf="competence.framework.description != null">
+            {{ competence.framework.description }}
+          </ion-card-content>
+          <ion-card-content *ngIf="competence.framework.description == null">
+              Description non disponible
+          </ion-card-content>
+          <ion-row>
+              <ion-col>
+                  <button ion-button  icon-left clear small>
+                    <ion-icon name="book"></ion-icon>
+                    <div>{{ competence.experience.label }}</div>
+                  </button>
+                </ion-col>
+                <ion-col>
+                  <button ion-button icon-left clear small>
+                    <ion-icon name="podium"></ion-icon>
+                    <div> {{ competence.niveau.niveau }}  • {{ competence.niveau.label }}</div>
+                  </button>
+                </ion-col>
+            </ion-row>
+        </ion-card>
+        <ion-card *ngIf="competence.langage != null" color="linkedin">
+            <ion-card-header>
+              {{ competence.langage.nom }}
+            </ion-card-header>
+            <ion-card-content *ngIf="competence.langage.description != null">
+              {{ competence.langage.description }}
+            </ion-card-content>
+            <ion-card-content *ngIf="competence.langage.description == null">
+                Description non disponible
+            </ion-card-content>
+            <ion-row >
+                <ion-col>
+                  <button ion-button class="textcolor"  icon-left clear small>
+                    <ion-icon name="book"></ion-icon>
+                    <div>{{ competence.experience.label }}</div>
+                  </button>
+                </ion-col>
+                <ion-col>
+                  <button ion-button class="textcolor" icon-left clear small>
+                    <ion-icon name="podium"></ion-icon>
+                    <div> {{ competence.niveau.niveau }}  • {{ competence.niveau.label }}</div>
+                  </button>
+                </ion-col>
+              </ion-row>
+          </ion-card>
+      </div>
+  </div>
+</ion-content>

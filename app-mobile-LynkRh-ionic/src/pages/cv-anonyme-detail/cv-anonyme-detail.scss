@@ -1,0 +1,25 @@
+page-cv-anonyme-detail {
+  .profile-image{
+    font-size: 80px;
+  }
+  .profile{
+    margin-top:0px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    background-color: color($colors,secondary);
+    color:white;
+  }
+  .title-head{
+    width: 100%;
+    font-size: 16px;
+    margin: 0 auto;
+    margin-top: 2em;
+    margin-bottom: 0em;
+    padding-bottom: 0em;
+    height: 25px;
+    text-align: center;
+  }
+  .textcolor{
+    color: white;
+  }
+}

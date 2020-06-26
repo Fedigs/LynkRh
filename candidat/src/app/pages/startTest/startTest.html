@@ -1,0 +1,87 @@
+<ba-card cardTitle="Test technique" baCardClass="with-scroll table-panel" *ngIf="start==true">
+<div>
+  <img src="/assets/img/loading.gif" *ngIf="activeBtn==false" class="pull-right">
+</div>
+<table class="table table-bordered">
+  <tbody>
+    <tr>
+      <td style="width:50%; text-align:left">
+        <div>
+          <label>Enoncé</label>
+          <label class="pull-right">Temps estimé:  {{totalDuree}}</label>
+        </div>
+        <hr>
+        <ba-card  baCardClass="with-scroll table-panel">
+            <div style="min-height: 250px;" [innerHTML]="actuelQuestion.enonce"></div>
+        </ba-card>
+      </td>
+      <td style="width:50%">
+          <div>
+              <label>Votre réponse</label>
+              <label class="pull-right">Temps écoulé:  {{timer}}</label>
+            </div>
+            <hr>
+            <ba-card  baCardClass="with-scroll table-panel" *ngIf="actuelQuestion.typeQuestion=='REPONSELIBRE'">
+                <div style="min-height: 250px;"  >
+                  <textarea class="form-control" [(ngModel)]="reponses[0].reponseText"  [disabled]="activeBtn==false||testEnd==true">
+                  </textarea>
+                </div>
+            </ba-card>
+            <hr>
+            <ba-card  baCardClass="with-scroll table-panel" *ngIf="actuelQuestion.typeQuestion=='PROGRAMMATION'">
+                <codemirror [(ngModel)]="reponses[0].reponseText"  [disabled]="activeBtn==false||testEnd==true"
+                [config]="{lineNumbers: true}"
+                (focus)="onFocus()"
+                (blur)="onBlur()">
+            </codemirror>
+                            </ba-card>
+           <div *ngIf="actuelQuestion.typeQuestion=='PROGRAMMATION'">
+             <label>Sortie console</label>
+             <div>
+               <hr>
+             </div>
+             <ba-card  baCardClass="with-scroll table-panel" >
+               <div style="min-height: 100px;"></div>
+            </ba-card>
+           </div>
+           <ba-card  baCardClass="with-scroll table-panel" *ngIf="actuelQuestion.typeQuestion=='QCM'">
+            <div style="min-height: 250px;" >
+              <ba-checkbox *ngFor="let r of actuelQuestion.reponses; let i=index;" [(ngModel)]="reponses[i].reponseBol" [label]="r.titre"  [disabled]="activeBtn==false||testEnd==true"></ba-checkbox>
+            </div>
+        </ba-card>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div style="margin-top:15px;">
+    <button class="btn btn-default pull-right" (click)="send()" [disabled]="activeBtn==false||testEnd==true"> <i class="fa fa-send"></i> Envoyer</button>
+</div>
+
+</ba-card>
+<div id="welcome-page" *ngIf="start==false||end==true||closeSession==true">
+  <div>
+   
+    <i class="fa fa-spinner fa-spin fa-3x fa-fw"  *ngIf="message==''&&verification==false"></i>
+    <h4 style="margin-top:10px;" *ngIf="message==''&&verification==false">{{welcomeMessage}}</h4>
+    <h4 style="margin-top:10px;" *ngIf="message!=''&&verification==false">{{message}}</h4>
+    <div style="margin-top:10px;" *ngIf="verification==true">
+      
+      <div class="alert alert-warning">
+          <div>Etes vous sur de commencer le test</div>
+       <p>Un test commencé ne peut etre refait</p> 
+        <button class="btn btn-success" (click)="confirm()">Oui</button>
+        <button class="btn btn-danger" routerLink="/pages/tests">Non</button>
+      </div>
+      
+    </div>
+    <div style="top:10%;">
+      <div *ngIf="end==true">
+        <img src="/assets/img/loading.gif">
+        <p>Finalisation du test</p>
+      </div>
+      <div *ngIf="closeSession==true">
+        <h3>Merci d'avoir passé le test nous vous informerons de l'état de votre candidature.</h3>
+      </div>
+    </div>
+  </div>
+</div>

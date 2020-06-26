@@ -1,0 +1,136 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Questions</h4>
+                        <div class="pull right" style="padding-top:10px;padding-bottom:3px">
+                            <label>choisir type de quetion a creer :</label>
+                            <select name="size"  class="form-control" [(ngModel)]="type"  (change)="changeTypeQuestion()">
+                                <option [ngValue]="0">Programmation</option>
+                                <option [ngValue]="1">QCM</option>
+                                <option [ngValue]="2">Reponse Libre</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success btn-fill pull-right" [disabled]="type==null" [routerLink]="['/pages/question']" [queryParams]="{tp: type}">nouvelle</button>
+                    </div>
+                    <div class="content">
+                        <div class="content all-icons">
+                         <div class="row">
+                                <div class="col-sm-3">
+                                        <div class="list-group">
+                                                <label>Langages</label>
+                                                <a  class="list-group-item" (click)="changeLangage('')" [ngClass]="{'disabled':options.langage==undefined||options.langage==''}">Tous({{langageStats.totalLangages}})</a>
+                                                <a  *ngFor="let l of langageStats.langages" class="list-group-item" (click)="changeLangage(l.id)" [ngClass]="{'disabled':options.langage==l.id}">{{l.nom}} ({{l.numbreOfQuestion}})</a>
+                                              </div>
+                                        <div class="list-group">
+                                                <label>Difficultés</label>
+                                                <a  class="list-group-item " (click)="changeDifficulte('')" [ngClass]="{'disabled':options.difficulte==undefined||options.difficulte==''}">Tous ({{themeDifficulteStats.difficultes.totalDifficulte}})</a>
+                                                <a  class="list-group-item" (click)="changeDifficulte('FACILE')" [ngClass]="{'disabled':options.difficulte=='FACILE'}">Facile ({{themeDifficulteStats.difficultes.FACILE}})</a>
+                                                <a  class="list-group-item" (click)="changeDifficulte('MOYEN')" [ngClass]="{'disabled':options.difficulte=='MOYEN'}">Moyen ({{themeDifficulteStats.difficultes.MOYEN}})</a>
+                                                <a  class="list-group-item" (click)="changeDifficulte('DIFFICILE')" [ngClass]="{'disabled':options.difficulte=='DIFFICILE'}">Difficile ({{themeDifficulteStats.difficultes.DIFFICILE}})</a>
+                                              </div>
+                                </div>
+                                <div class="col-sm-9">
+                                        <ul class="nav nav-tabs">
+                                                <li [ngClass]="{'disabled active':options.theme==undefined||options.theme==''}" ><a  data-toggle="tab" (click)="changeTheme('')">Tous({{themeDifficulteStats.themes.totalThemes}})</a></li>
+                                                <li *ngFor="let t of themeDifficulteStats.themes.themes" [ngClass]="{'disabled active':options.theme==t.id}"><a  data-toggle="tab"  (click)="changeTheme(t.id)">{{t.nom}} ({{t.numbreOfQuestion}})</a></li>
+                                              </ul>
+                                              <div style="background: #EFEFEF; padding:10px;">
+                                                    <div class="form-inline">
+                                                      <div class="form-group">
+                                                        <input type="radio" name="typeQuestion" ([ngModel])="options.typeQuestion" (click)="changeType('')" checked="checked" value="" class="form-control">
+                                                        <label>Tout</label>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <input type="radio" name="typeQuestion" ([ngModel])="options.typeQuestion"  (click)="changeType('QCM')" value="QCM" class="form-control">
+                                                        <label>Qcm</label>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <input type="radio" name="typeQuestion" ([ngModel])="options.typeQuestion"  value="REPONSELIBRE" (click)="changeType('REPONSELIBRE')" class="form-control">
+                                                        <label>Réponse libre</label>
+                                                      </div>
+                                                      <div class="form-group">
+                                                        <input type="radio" name="typeQuestion" ([ngModel])="options.typeQuestion" value="PROGRAMMATION" (click)="changeType('PROGRAMMATION')" class="form-control">
+                                                        <label>Programmation</label>
+                                                      </div>
+                                                        <div class="form-group pull-right">
+                                                          <label>Nombre :</label>
+                                                          <select name="size"  class="form-control" [(ngModel)]="options.size" (change)="changeSize()">
+                                                            <option vamue="5">5</option>
+                                                            <option vamue="10">10</option>
+                                                            <option vamue="15">15</option>
+                                                            <option vamue="20">20</option>
+                                                          </select>
+                                                        </div>
+                                                    </div>
+                                                  </div>
+                                              <div class="row" *ngFor="let q of questions.listQuestions.content">
+                                                    <div class="font-icon-list col-md-12">
+                                                        <div class="font-icon-detail" style="text-align: left; padding: 10px;">
+                                                            <h3>{{q.titre}}</h3>
+                                                            <div class="row">
+                                                                <div class="col-sm-10">
+                                                                    <table class="questions-details">
+                                                                        <tr><td><img src="../assets/img/icon/langage.jpg" alt=""></td><td><label style="color:black"> Langage</label></td>: {{q.langage.nom}}<td></td></tr>
+                                                                        <tr><td><img src="../assets/img/icon/theme.jpg" alt=""></td><td><label style="color:black"> Thème</label></td><td>: {{q.theme.nom}}</td></tr>
+                                                                        <tr><td><img src="../assets/img/icon/difficulté.jpg" alt=""></td><td><label style="color:black" > Difficulté</label></td><td>: {{q.difficulte}}</td></tr>
+                                                                        <tr><td><img src="../assets/img/icon/point.jpg" alt=""></td><td><label style="color:black"> Points</label></td><td>: {{q.score}}</td></tr>
+                                                                        <tr><td><img src="../assets/img/icon/durée.jpg" alt=""></td><td><label style="color:black" > Durée</label></td><td>: </td></tr>
+                                                                        <tr><td><img src="../assets/img/icon/description.jpg" alt=""></td><td><label style="color:black"> Description</label></td><td>: {{q.description}}<span style="font-size: 10px;"></span></td></tr>
+                                                                      </table>
+                                                                </div>
+                                                                <div class="col-sm-2 btn-vertical">
+                                                                    <div class="" *ngIf="mode=='default'">
+                                                                        <button class="btn btn-success btn-block" (click)="addToTest(q.id)"   >Ajouter</button>
+                                                                    </div>
+                                                                    <div class="" *ngIf="mode!='default'">
+                                                                        <button class="btn btn-success btn-block" *ngIf="!isQuestionExist(q.id)" (click)="selectionner(q)"  >Sélectionner</button>
+                                                                        <button class="btn btn-danger btn-block" *ngIf="isQuestionExist(q.id)" (click)="enlever(q.id)"  >Retirer</button>
+                                                                    </div>
+                                                                    <div *ngIf="mode=='default'">
+                                                                        <button class="btn btn-primary btn-block" (click)="editer(q)"  >Editer</button>
+                                                                    </div>
+                                                                    <div >
+                                                                        <button class="btn btn-warning btn-block" (click)="copy(q.id)"  >Copier</button>
+                                                                    </div>
+                                                                    <div *ngIf="mode=='default'">
+                                                                        <button class="btn btn-danger btn-block" (click)="deleteModal(q.id)"  >Supprimer</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                </div>
+                                                <div style="text-align:center" *ngIf="pages.length>0">
+                                                        <nav aria-label="Page navigation example">
+                                                          <ul class="pagination">
+                                                            <li class="page-item" *ngIf="questions.listQuestions.first==false">
+                                                              <a class="page-link"  aria-label="Previous" (click)="paginate('p')">
+                                                                <span aria-hidden="true">&laquo;</span>
+                                                                <span class="sr-only">Previous</span>
+                                                              </a>
+                                                            </li>
+                                                            <li class="page-item" *ngFor="let p of pages; let i=index" [ngClass]="{'disabled active':pageCourant==i}"><a class="page-link"  (click)="paginate(i)">{{i+1}}</a></li>
+                                                            <li class="page-item" *ngIf="questions.listQuestions.last==false">
+                                                              <a class="page-link"  aria-label="Next" (click)="paginate('n')">
+                                                                <span aria-hidden="true">&raquo;</span>
+                                                                <span class="sr-only">Next</span>
+                                                              </a>
+                                                            </li>
+                                                          </ul>
+                                                        </nav>
+                                                      </div>
+                                </div>
+                         </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   

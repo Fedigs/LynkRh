@@ -1,0 +1,43 @@
+:host >>> .tooltip-inner {
+    background-color: #87CB16;
+    color: #fff;
+    min-width: 500px;
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+  }
+  :host >>> .tooltip.top .tooltip-arrow:before,
+  :host >>> .tooltip.top .tooltip-arrow {
+    border-top-color: #87CB16;
+  }
+  :host >>> .tooltip.in{opacity:1!important;
+    filter: alpha(opacity=100);
+}
+:host >>> .tooltip.left .tooltip-arrow:before,
+:host >>> .tooltip.left .tooltip-arrow{
+    display: none;
+}
+.cv-info-perso{
+  min-height: 200px;
+  max-height: 200px;
+  background: #049F0C;
+  color: white;
+}
+.cv-bg{
+  min-height: 600px;
+}
+.cv-element-titre{
+  color: #049F0C ;
+
+}
+.cv-bar{
+  background-color: #049F0C !important;
+  margin-top:2px;
+  height: 2px;
+  border: 1px solid #049F0C;
+}
+.cv-component{
+  min-height: 200px;
+}
+.cv-div{
+border-left: 15px solid #049F0C !important;
+}

@@ -1,0 +1,143 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Edit Profile</h4>
+                    </div>
+                    <div class="content">
+                            <div class="row">
+                                    <div class="alert alert-warning" *ngIf="reponse.error">
+                                            <strong>Avertissement :</strong> 
+                                            <ul>
+                                              <li *ngIf="reponse.titre">Le titre {{reponse.titre}}</li>
+                                              <li *ngIf="reponse.score">Le score {{reponse.score}}</li>
+                                              <li *ngIf="reponse.theme">Le thème {{reponse.theme}}</li>
+                                              <li *ngIf="reponse.langage">Le langage {{reponse.langage}}</li>
+                                              <li *ngIf="reponse.duree">La durée {{reponse.duree}}</li>
+                                              <li *ngIf="reponse.difficulte">La difficulté {{reponse.difficulte}}</li>
+                                              <li *ngIf="reponse.enonce">L'énoncé {{reponse.enonce}}</li>
+                                              <li *ngIf="reponse.description">La description {{reponse.description}}</li>
+                                              <li *ngIf="reponse.reponses">{{reponse.reponses}}</li>
+                                            </ul>
+                                          </div>
+                                          <form #form="ngForm">
+                                          <div id="question-inputs1">
+                                          <div class="col-md-6">
+                                            <table>
+                                              <tr class="table-tr">
+                                                <td><label>Titre</label></td><td>
+                                                        <div class="input-group col-sm-12">
+                                                                <span class="input-group-addon">
+                                                                  <img src="../assets/img/icon/6.png"/>
+                                                                </span>
+                                                                <input type="text"  class="form-control"    name="titre" required [(ngModel)]="question.titre">
+                                                    </div></td></tr>
+                                                <tr class="table-tr"><td><label>Durée</label></td><td> 
+                                                        <div class="input-group col-sm-12">
+                                                                <span class="input-group-addon">
+                                                                   <img src="../assets/img/icon/5.png"/>
+                                                                </span>
+                                                                <input type="text"    class="form-control"  name="titre" name="duree" required [(ngModel)]="question.duree">
+                                                  </div></td></tr>
+                                                <tr class="table-tr"><td><label>Langage</label></td><td>
+                                                    <div class="input-group col-sm-12">
+                                                        <span class="input-group-addon">
+                                                          <img src="../assets/img/icon/1.png"/>
+                                                        </span><select      class="form-control" #langage (change)="onChangeLangage(langage.value)" required name="langage" [(ngModel)]="question.langage.id">
+                                                    <option *ngFor="let l of iParams.langages" [value]="l.id">{{l.nom}}</option>
+                                                  </select>
+                                                </div></td></tr>
+                                            </table>
+                                          </div>
+                                         <div class="col-md-6">
+                                            <table>
+                                                <tr class="table-tr">
+                                                  <td><label>Points</label></td><td>
+                                                        <div class="input-group col-sm-12">
+                                                                <span class="input-group-addon">
+                                                                  <img src="../assets/img/icon/4.png"/>
+                                                                </span>
+                                                                <input type="text"    class="form-control" name="score" required [(ngModel)]="question.score">
+                                                      </div></td></tr>
+                                                  <tr class="table-tr"><td><label>Difficulté</label></td><td> 
+                                                        <div class="input-group col-sm-12">
+                                                                <span class="input-group-addon">
+                                                                  <img src="../assets/img/icon/3.png"/>
+                                                                </span>
+                                                               <select     class="form-control" name="difficulte" required [(ngModel)]="question.difficulte">
+                                                                 <option *ngFor="let d of iParams.difficulte" [value]="d">{{d}}</option>
+                                                              </select>
+                                                    </div></td></tr>
+                                                  <tr class="table-tr"><td><label>Thème</label></td><td>
+                                                        <div class="input-group col-sm-12">
+                                                                <span class="input-group-addon">
+                                                                  <img src="../assets/img/icon/2.png"/>
+                                                                </span>
+                                                                 <select      class="form-control"  name="theme" required [(ngModel)]="question.theme.id">
+                                                                  <option *ngFor="let t of iParams.themes" [value]="t.id">{{t.nom}}</option>
+                                                                </select>
+                                                  </div></td></tr>
+                                              </table>
+                                          </div>
+                                          <div class="clearfix"></div>
+                                        </div>
+                                        <div style="margin: 15px;">
+                                          <div class="col-md-12" style="padding-left:0px; padding-right:0px">
+                                            <div class="col-md-6" style="padding-left:0px">
+                                                <div [froalaEditor] [(froalaModel)]="question.enonce" ></div>
+                                            </div>
+                                            <div class="col-md-6" *ngIf="type==0">
+                                                <div ace-editor
+                                                [(text)]="text"
+                                                [mode]="'sql'" 
+                                                [theme]="'eclipse'"
+                                                [options]="options"
+                                                [readOnly]="false"
+                                                [autoUpdateContent]="true" 
+                                                [durationBeforeCallback]="1000" 
+                                                (textChanged)="onChange($event)"
+                                                style="min-height: 250px!important; width:100%; overflow: auto;"></div>
+                                            </div>
+                                            <div class="col-md-6" *ngIf="type==1" style="padding-right:0px;margin-right:0px">
+                                              <div class="panel panel-default"  >
+                                                <div class="panel-heading" style="padding-bottom:10px  !important;">
+                                                  Réponses <button class="btn btn-sm btn-success pull-right" (click)="addReponseQcm()"    ><i class="fa fa-plus"></i> Réponse</button>
+                                                </div>
+                                                <div class="panel-body" style="min-height:200px;">
+                                                  <app-reponses-qcm [(items)]="question.reponses"></app-reponses-qcm>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col-md-6" *ngIf="type==2" style="padding-right:0px;margin-right:0px">
+                                                <div class="panel panel-default">
+                                                  <div class="panel-heading" style="padding-bottom:10px  !important;">
+                                                    Réponses <button class="btn btn-sm btn-success pull-right" (click)="addReponseLibre()"   ><i class="fa fa-plus"></i> Réponse</button>
+                                                  </div>
+                                                  <div class="panel-body" style="min-height:200px;">
+                                                    <app-reponses-libre  [(items)]="question.reponses" ></app-reponses-libre>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            <div class=" col-md-offset-6 col-md-6" style="padding-right:0px;margin-right:0px">
+                                                <h4>Description</h4>
+                                                <div class="form-group">
+                                                  <textarea    name="description" id="" cols="30" rows="10" required class="form-control" name="description" [(ngModel)]="question.description"></textarea>
+                                                </div>
+                                                <div class="col-md-offset-3">
+                                                  <button class="btn btn-warning" (click)="tester()"   >Tester</button>
+                                                  <button class="btn btn-success" [disabled]="!form.form.valid&&!isReponsesCorrect()" (click)="enregistrer()">Enregistrer</button>
+                                                </div>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>

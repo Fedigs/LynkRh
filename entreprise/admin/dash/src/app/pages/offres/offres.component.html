@@ -1,0 +1,316 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Offres</h4>
+                    </div>
+                    <div class="content">
+                        <div class="col-md-12">
+                            <div class="pull-right" style="margin-bottom:15px;">
+                                <button class="btn btn-fill btn-success btn-sm" (click)="newOffre()">Nouvel</button>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <table class="table table-bordered table-striped" style="margin-top:25px;font-size:13px; ">
+                                    <thead>
+                                        
+                                      <tr>
+                                            <th>
+                                                <input type="text" name="offrename" [(ngModel)]="option.titre" class="form-control" (change)="getOffres()">
+                                            </th>
+                                            <th>
+                                                    <div class="input-group">
+                                                            <input class="form-control" style="float:none" placeholder="chercher pour une date" ngx-mydatepicker name="mydate"
+                                                                   [(ngModel)]="date" [options]="myOptions" #dp="ngx-mydatepicker" (dateChanged)="onDateChanged($event)"/>
+                                                    
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-default" (click)="dp.clearDate()">
+                                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+                                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                                </button>
+                                                            </span>
+                                                        </div>     
+                                             </th>
+                                          <!-- <th>
+                                                        <ng-select [items]="entreprises" [multiple]="false" style="z-index:998;"
+                                                                   bindLabel="nom"
+                                                                   bindValue="username"
+                                                                   placeholder="Entreprise cliente"
+                                                                   [(ngModel)]="option.username" (change)="getOffres()">
+                                                        </ng-select>
+                                          </th> -->
+                                          <th>
+                                                        <select class="form-control" name="status" [(ngModel)]="option.status" (change)="getOffres()">
+                                                            <option value="0">Tous </option>
+                                                            <option value="1">Nouvel </option>
+                                                            <option value="2">Terminée </option>
+                                                        </select>
+                                         </th>
+                                          <th>
+
+                                          </th>
+                                      </tr>
+                                      <tr>
+                                          <th>Titre</th>
+                                          <th>Créee </th>
+                                          <!-- <th>Entreprise</th> -->
+                                          <th>Status</th>
+                                          <th>Actions</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let o of offres.content">
+                                            <td>{{o.titre}}</td>
+                                            <td>{{o.createAt| date: 'yyyy-MM-dd'}}</td>
+                                            <!-- <td>{{o.proprietaire.nom}}</td> -->
+                                            <td>
+                                                <span class="label label-success" *ngIf="o.status==0||o.status==1">Nouvelle</span>
+                                                <span class="label label-danger" *ngIf="o.status==2">Terminée</span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-xs btn-default btn-fill" (click)="setEdition(o)"><i class="fa fa-pencil" style="cursor: pointer"></i></button>
+                                                <button class="btn btn-xs btn-default btn-fill" (click)="showOffre(o.id)"> <i class="fa fa-info" style="cursor: pointer"></i></button>
+                                                <!-- <button class="btn btn-xs btn-default btn-fill"  (click)="matching(o.id)"><i class="fa fa-search" style="cursor: pointer"></i></button> -->
+                                                <!-- <button class="btn btn-xs btn-default btn-fill" ><i class="fa fa-envelope" style="cursor: pointer"></i></button> -->
+                                                <button class="btn btn-xs btn-default btn-fill" [disabled]="o.disableCv" (click)="CvAnonyme(o.id)"><i class="fa fa-paperclip" style="cursor: pointer" ></i></button>
+                                                <!-- <a class="btn btn-xs btn-default btn-fill" [routerLink]="['/pages/test-resultat']" [queryParams]="{id: o.id}"><i class="fa fa-bar-chart" style="cursor: pointer"></i></a>
+                                                <a class="btn btn-xs btn-default btn-fill" [routerLink]="['/pages/resultat/candidat-resultat']" [queryParams]="{id: o.id,titre: o.titre}"><i class="fa fa-pie-chart" style="cursor: pointer"></i></a> -->
+                                                <button class="btn btn-xs btn-default btn-fill" (click)="openSupprimerOffre(o.titre,o.id)"> <i class="fa fa-trash-o" style="cursor: pointer"></i></button>
+                                            </td>
+                                           
+                                        </tr>
+                                    </tbody>
+                            </table>
+                            <div style="text-align:center" *ngIf="pages.length>0">
+                                    <nav aria-label="Page navigation example">
+                                      <ul class="pagination">
+                                        <li class="page-item" *ngIf="tests.first==false">
+                                          <a class="page-link"  aria-label="Previous" (click)="paginate('p')">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                          </a>
+                                        </li>
+                                        <li class="page-item" *ngFor="let p of pages; let i=index" [ngClass]="{'disabled active':pageCourant==i}"><a class="page-link"  (click)="paginate(i)">{{i+1}}</a></li>
+                                        <li class="page-item" *ngIf="tests.last==false">
+                                          <a class="page-link"  aria-label="Next" (click)="paginate('n')">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                          </a>
+                                        </li>
+                                      </ul>
+                                    </nav>
+                                  </div>
+                    </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template #offreModal>
+    <app-load *ngIf="show"></app-load>
+
+        <div *ngIf="!show" class="modal-header">
+                <button type="button pull-right" style="margin:10px;cursor:pointer" class="close"  (click)="modalRef.hide()">&times;</button>
+          <h4 class="modal-title pull-left">Offre</h4>
+        </div>
+        <div *ngIf="!show" class="modal-body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="content">
+                            <div class="row" style="padding:10px;">
+                                    <div class="alert alert-warning" *ngIf="rep.error==true">
+                                        {{rep.message}}
+                                    </div>
+                                    <div class="alert alert-success" *ngIf="rep.error==false">
+                                            {{rep.message}}
+                                    </div>
+                                        <div class="form-group">
+                                            <label>Titre</label>
+                                            <input type="text" class="form-control" name="titre" [(ngModel)]="offre.titre">
+                                        </div>
+                                         <div class="">
+                                                <div class="form-group">
+                                                         <label>Langage</label>
+                                                         <ng-select [items]="initValues.langages" [multiple]="true"  style="z-index:1002;"
+                                                                    bindLabel="nom"
+                                                                    bindValue="id"
+                                                                    placeholder="Langage"
+                                                                    [(ngModel)]="selectedLangagesId">
+                                                         </ng-select>
+                                                         
+                                                        </div>
+                                         </div>
+                                         <div class="">
+                                                 <div class="form-group">
+                    
+                                                         <label>Framework</label>
+                                                         <ng-select [items]="initValues.frameworks" [multiple]="true"  style="z-index:1001;"
+                                                                    bindLabel="nom"
+                                                                    bindValue="id"
+                                                                    placeholder="Framework"
+                                                                    [(ngModel)]="selectedFrameworksId">
+                                                         </ng-select>
+                                                        </div>
+                                         </div>
+                                         <div class="">
+                                                <div class="form-group">
+                                                     <label>Contrat</label>
+                                                     <ng-select [items]="initValues.typeContrat" [multiple]="true" style="z-index:1000;"
+                                                                bindLabel="nom"
+                                                                bindValue="id"
+                                                                placeholder="Contrat"
+                                                                [(ngModel)]="selectedContratsId">
+                                                     </ng-select>
+                                                    </div>
+                                         </div>
+                                         <!-- <div class="">
+                                                <div class="form-group">
+                                                     <label>Test</label>
+                                                     <ng-select [items]="tests" [multiple]="false" style="z-index:999;"
+                                                                bindLabel="titre"
+                                                                bindValue="id"
+                                                                placeholder="Test"
+                                                                [(ngModel)]="offre.test.id">
+                                                     </ng-select>
+                                                    </div>
+                                         </div>
+                                         <div class="">
+                                                <div class="form-group">
+                                                     <label>Entreprise</label>
+                                                     <ng-select [items]="entreprises" [multiple]="false" style="z-index:998;"
+                                                                bindLabel="nom"
+                                                                bindValue="username"
+                                                                placeholder="Entreprise cliente"
+                                                                [(ngModel)]="offre.proprietaire.username">
+                                                     </ng-select>
+                                                    </div>
+                                         </div> -->
+                                         <div>
+                                             <div class="form-group">
+                                                 <label>Description</label>
+                                                 <div [froalaEditor] [(froalaModel)]="offre.description" ></div>
+                                             </div>
+                                         </div>
+                                         <button class="btn btn-fill  btn-success pull-right" (click)="addOffre()">Valider</button>
+                                         </div>
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+</template>
+
+<template #offreInfoModal>
+    <div class="modal-header">
+            <button type="button pull-right" style="margin:10px;cursor:pointer" class="close"  (click)="modalRef.hide()">&times;</button>
+        <h4 class="modal-title pull-left"><b>Details de l'offre</b></h4>
+    </div>
+<div class="modal-body ">
+    <div class="row offre-info-perso">
+        <div class="container">
+                <div class="col-md-12">
+                    <div class="container">
+                        
+                        <p>
+                                <i class="fa fa-building" aria-hidden="true"></i> {{clickedOffre.proprietaire.nom}}
+                            </p>
+                        <p>
+                                <i class="fa fa-map-marker" aria-hidden="true"></i> {{clickedOffre.proprietaire.adresse}}
+                            </p>
+                            <p>
+                                <i class="fa fa-envelope" aria-hidden="true"></i> {{clickedOffre.proprietaire.email}}
+                            </p>
+                            <p>
+                                <b><i class="fa fa-phone" aria-hidden="true"></i>{{clickedOffre.proprietaire.tel}}</b>                                                       
+                            </p>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <hr>
+    <div>
+
+        <div class="col-md-9" style="margin-top:20px;">
+            <h3><b>{{clickedOffre.titre}}</b></h3>
+            <div style="margin-top:20px;margin-left:30px;">
+                    <h4 class="cv-element-titre"><b>COMPETENCES</b></h4>
+                    <ul class="list-unstyled">
+                        <li>Langages</li>
+                        <li>
+                            <ul>
+                                <li *ngFor="let l of clickedOffre.langages">
+                                        {{l.nom}}
+                                    </li> 
+                            </ul>
+                        </li>                                      
+                        <li>Frameworks</li>
+                        <li>
+                            <ul>
+                                <li *ngFor="let f of clickedOffre.frameworks">
+                                        {{f.nom}}
+                                    </li> 
+                            </ul>
+                        </li>                                      
+                    </ul>
+        </div>
+            <div style="margin-top:20px;margin-left:30px;"  *ngIf="checkedTypeContrat('CDD')||checkedTypeContrat('CDI')||checkedTypeContrat('SVIP1')||checkedTypeContrat('SVIP2')">
+                <h4 class="cv-element-titre"><b>TYPE DE CONTRATS</b></h4>
+                <div class="label label-success" *ngIf="checkedTypeContrat('CDD')">CDD</div>
+                <div class="label label-primary" *ngIf="checkedTypeContrat('CDI')">CDI</div>
+                <div class="label label-info" *ngIf="checkedTypeContrat('SVIP1')">SVIP1</div>
+                <div class="label label-default" *ngIf="checkedTypeContrat('SVIP2')">SVIP2</div>
+                <div class="label label-danger" *ngIf="checkedTypeContrat('STAGE')">STAGE</div>
+            </div>
+            <div style="margin-top:20px;margin-left:30px;" >
+                <h4 class="cv-element-titre"><b>DESCRIPTION</b></h4>
+                <p [innerHTML]="clickedOffre.description"></p>
+            </div>
+
+        </div>
+        <!-- <div class="col-md-3" style="margin-top:30px;">
+            <div>
+                        <div style="margin-top:20px;" class="col-md-12">
+                            <div class="alert alert-warning" *ngIf="clickedOffre.test.id==undefined">
+                                Aucun test n'est associé à cet offre, veuillez en choisir un pour completer l'offre
+                            </div>
+                            <div class="form-group">
+                                    <label>Test</label>
+                                    <ng-select [items]="tests" [multiple]="false" style="z-index:999;" [clearable]="false" [disabled]="clickedOffre.status==2"
+                                                bindLabel="titre"
+                                                bindValue="id"
+                                                placeholder="Test"
+                                                [(ngModel)]="clickedOffre.test.id" (change)="updateOffreTest()">
+                                    </ng-select>
+                                    </div>
+                        </div>
+            </div>
+        </div> -->
+    </div>
+
+    <div class="clearfix"></div>
+    </div>
+</template>
+<template #supprimerOffre>
+        <app-load *ngIf="show"></app-load>
+    <div *ngIf="!show" class="modal-header">
+        <h4 class="modal-title pull-left">Supprimer Offre</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div *ngIf="!show" class="modal-body">
+          <div class="alert alert-warning">
+             Vous étés sur vous voulez supprimer l'offre {{ titre }}
+          </div>
+      </div>    
+      <div *ngIf="!show" class="modal-footer">
+          <button class="btn btn-success " (click)="deleteOffre()">Supprimer</button>
+          <button type="button" class="btn btn-default" (click)="modalRef.hide()">Annuler</button>
+      </div>
+</template>

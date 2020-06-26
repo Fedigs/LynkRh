@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+.modal-dialog1 {
+    width: 100% !important;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .modal-content1 {
+    height: auto;
+    min-height: 100%;
+    border-radius: 0;
+  }
+  /*Date picker container*/ bs-datepicker-container { z-index: 1080;float:none; }

@@ -1,0 +1,35 @@
+<div>
+    <img src="/assets/img/loading.gif" *ngIf="activeBtn==false" class="pull-right">
+  </div>
+ <table class="table table-bordered">
+    <tbody>
+      <tr>
+        <td style="width:50%; text-align:left">
+          <div>
+            <label>Enoncé</label>
+            <label class="pull-right">Temps estimé:  {{time}}</label>
+          </div>
+          <hr>
+          <ba-card  baCardClass="with-scroll table-panel">
+              <div style="min-height: 250px;" [innerHTML]="question.enonce"></div>
+          </ba-card>
+        </td>
+        <td style="width:50%">
+            <div>
+                <label>Votre réponse</label>
+                <label class="pull-right">Temps écoulé:  {{timer}}</label>
+              </div>
+              <hr>
+              <ba-card  baCardClass="with-scroll table-panel" >
+                  <div style="min-height: 250px;">
+                    <textarea class="form-control" [(ngModel)]="reponses[0].reponseText"  [disabled]="activeBtn==false||testEnd==true">
+                    </textarea>
+                  </div>
+              </ba-card>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:15px;">
+      <button class="btn btn-default pull-right" (click)="send()" [disabled]="activeBtn==false||testEnd==true"> <i class="fa fa-send"></i> Envoyer</button>
+  </div>

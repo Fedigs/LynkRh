@@ -1,0 +1,277 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Liste des candidats selectionne par le gestionnaire</h4>
+                        <p class="category"></p>
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                          <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let cell of tableData1.headerRow">{{ cell }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of dataRows">
+                                        <td>{{ row.candidat.username }}</td>
+                                        <td>{{ row.candidat.nom }}</td>
+                                        <td>{{ row.candidat.prenom }}</td>
+                                        <td>{{ row.offre.titre }}</td>
+                                        <td>{{ row.candidat.score }}</td>
+                                        <td>
+                                           <button class="btn btn-xs btn-default btn-fill" (click)="openCvAnonyme(row.candidat)"> <i class="fa fa-eye" aria-hidden="true"></i></button>
+                                           <button class="btn btn-xs btn-default btn-fill" (click)="openInviterEntretienDefinitif(row.candidat)" ><i class="fa fa-envelope" style="cursor: pointer"></i></button> 
+                                           <button class="btn btn-xs btn-default btn-fill" [disabled]="!row.inviter " (click)="openAccepter(row.candidat)" ><i class="fa fa-check" style="cursor: pointer"></i></button>  
+                                        </td>
+                                        <td>
+                                           <div *ngIf="row.candidat.dis"><app-bounce></app-bounce></div> 
+                                           <span class="label label-success" *ngIf="row.inviter && !row.candidat.dis" >invité</span>
+                                           <span class="label label-danger" *ngIf="!row.inviter && !row.candidat.dis" >non invité</span>
+                                           <!-- <div>{{ row.candidat.dis }}</div> -->
+                                        </td>
+                                        <td>
+                                            <div *ngIf="row.candidat.acc"><app-bounce></app-bounce></div> 
+                                            <span class="label label-success" *ngIf="row.candidat.accepte" >accepté</span>
+                                            <span class="label label-danger" *ngIf="!row.candidat.accepte" >non accepté</span> 
+                                        </td>
+                                        <!-- <td>{{row.id.candidat.username}}</td>
+                                        <td>{{row.id.candidat.nom}}</td>
+                                        <td>{{row.id.candidat.prenom}}</td>
+                                        <td>{{row.id.candidat.email}}</td> -->
+                                        <!-- <td> <button class="btn btn-xs btn-default btn-fill" (click)="inviter(row);"><i class="fa fa-envelope" style="cursor: pointer"></i></button>
+                                          <button class="btn btn-xs btn-default btn-fill" (click)="selectedCandidat(row.id.candidat.username);"> <i class="fa fa-check" aria-hidden="true"></i></button>
+                                          <button class="btn btn-xs btn-default btn-fill" [disabled]='!row.verif' (click)="resultat(row.id.candidat.username); username = row.id.candidat.username" ><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+                                        </td>
+                                        <td>
+                                            <span class="label label-success" *ngIf="row.invite">invité</span>
+                                            <span class="label label-danger" *ngIf="!row.invite">non invité</span>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="checkedCandidat" name="checkedCandidat" [disabled]="(row.checked==true)" [(ngModel)]="row.isChecked" (ngModelChange)="test($event)">
+                                        </td> -->
+                                    </tr>
+                                </tbody>
+                          </table>
+                          <div style="text-align:center" *ngIf="pages.length>0">
+                            <nav aria-label="Page navigation example">
+                              <ul class="pagination">
+                                <li class="page-item" *ngIf="testpage.first==false">
+                                  <a class="page-link"  aria-label="Previous" (click)="paginate('p')">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                  </a>
+                                </li>
+                                <li class="page-item" *ngFor="let p of pages; let i=index" [ngClass]="{'disabled active':pageCourant==i}"><a class="page-link"  (click)="paginate(i)">{{i+1}}</a></li>
+                                <li class="page-item" *ngIf="testpage.last==false">
+                                  <a class="page-link"  aria-label="Next" (click)="paginate('n')">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                  </a>
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
+                    </div>     
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<template #CvAnonyme>
+    <div class="modal-body ">
+        <div class="row cv-info-perso">
+            <div class="container">
+                    <div class="col-md-2">
+                            <img alt="..." class="avatar border-gray" src="../../assets/img/default-avatar.png">
+                    </div>
+                    <div class="col-md-10">
+                       <div class="container">
+                            <h2 style><b>{{ candidatAfficher.nom +" "+ candidatAfficher.prenom}}</b></h2>
+                            <h3>Scores: {{candidatAfficher.score}}</h3>
+                       </div>
+                    </div>
+            </div>
+        </div>
+        <div>
+            <div class="col-md-9" style="margin-top:20px;">
+                <h3><b>RESUME DU CV EN LIGNE</b></h3>
+                <div class="label label-success" *ngIf="checkedTypeContrat('CDD',candidatAfficher)">CDD</div>
+                <div class="label label-primary" *ngIf="checkedTypeContrat('CDI',candidatAfficher)">CDI</div>
+                <div class="label label-info" *ngIf="checkedTypeContrat('SVIP1',candidatAfficher)">SVIP1</div>
+                <div class="label label-default" *ngIf="checkedTypeContrat('SVIP2',candidatAfficher)">SVIP2</div>
+                <div class="label label-danger" *ngIf="checkedTypeContrat('STAGE',candidatAfficher)">STAGE</div>
+                <div class="alert alert-warning" *ngIf="!checkedTypeContrat('CDD',candidatAfficher)&&!checkedTypeContrat('CDI',candidatAfficher)&&!checkedTypeContrat('SVIP1',candidatAfficher)&&!checkedTypeContrat('SVIP2',candidatAfficher)&&!checkedTypeContrat('FREELANCE',candidatAfficher)&&!checkedTypeContrat('STAGE',candidatAfficher)">
+                    Aucun type de contrat dans ce cv
+                </div>
+                <div style="margin-top:20px"  *ngIf="checkedTypeContrat('CDD',candidatAfficher)||checkedTypeContrat('CDI',candidatAfficher)||checkedTypeContrat('SVIP1',candidatAfficher)||checkedTypeContrat('SVIP2',candidatAfficher)">
+                    <h4 class="cv-element-titre"><b>TYPE SALARIE</b></h4>
+                    <dl class="dl-horizontal">
+                        <dt>Salaire mensuel</dt>
+                        <dd *ngIf="candidatAfficher?.contrats[0]?.salaireMensuel != null" >{{candidatAfficher?.contrats[0]?.salaireMensuel}} <small>dt</small></dd>
+                        <dd *ngIf="candidatAfficher?.contrats[0]?.salaireMensuel == null" >Non disponible</dd>
+                        <dt>Date de disponibilité</dt>
+                        <dd *ngIf="candidatAfficher?.contrats[0]?.disponibilite != null" >{{candidatAfficher?.contrats[0]?.disponibilite| date:'yyyy-MM-dd'}}</dd>
+                        <dd *ngIf="candidatAfficher?.contrats[0]?.disponibilite == null" >Non disponible</dd>
+                    </dl>
+                </div>
+                <div style="margin-top:20px" *ngIf="checkedTypeContrat('FREELANCE',candidatAfficher)">
+                    <h4 class="cv-element-titre"><b>TYPE FREELANCE</b></h4>
+                    <dl class="dl-horizontal">
+                            <dt>Salaire journalier</dt>
+                            <dd *ngIf="candidatAfficher?.contrats[0].salaireJournalier != null">{{candidatAfficher?.contrats[0].salaireJournalier}} <small>dt</small></dd>
+                            <dd *ngIf="candidatAfficher?.contrats[0].salaireJournalier == null">Non disponible</dd>
+                            <dt>Type de freelance</dt>
+                            <dd *ngIf="candidatAfficher?.contrats[0].typeFreelance != null" >{{candidatAfficher?.contrats[0].typeFreelance}}</dd>
+                            <dd *ngIf="candidatAfficher?.contrats[0].typeFreelance == null" >Non disponible</dd>
+                            <dt>Lieu de travail</dt>
+                            <dd *ngIf="candidatAfficher?.contrats[0].lieuTravail != null">{{candidatAfficher?.contrats[0].lieuTravail}}</dd>
+                            <dd *ngIf="candidatAfficher?.contrats[0].lieuTravail == null">Non disponible</dd>
+                            <dt>Date de disponibilité</dt>
+                            <dd *ngIf="candidatAfficher?.contrats[0].disponibilite != null" >{{candidatAfficher?.contrats[0].disponibilite| date:'yyyy-MM-dd'}}</dd> 
+                            <dd *ngIf="candidatAfficher?.contrats[0].disponibilite == null">Non disponible</dd>
+                            </dl>
+                </div> 
+                <!-- <div style="margin-top:20px" *ngIf="checkedTypeContrat('STAGE',candidatAfficher)">
+                    <h4 class="cv-element-titre"><b>STAGE</b></h4>
+                    <dl class="dl-horizontal">
+                            <dt>Date de début</dt>
+                            <dd>{{candidatAfficher?.contrats.contratStage.disponibilite| date:'yyyy-MM-dd'}}</dd>
+                            <dt>Durée</dt>
+                            <dd>{{candidatAfficher?.contrats.contratStage.nbMois}}</dd>
+                        </dl>
+                </div> -->
+                <div style="margin-top:20px">
+                    <h4 class="cv-element-titre"><b>COMPETENCES</b></h4>
+                    <div class="alert alert-warning" *ngIf="candidatAfficher?.competences.length==0">
+                        Aucune compétences dans ce cv
+                    </div>
+                    <ul class="list-unstyled">
+                        <li *ngFor="let c of candidatAfficher.competences">
+                                <dl class="dl-horizontal" *ngIf="c.framework !=null || c.langage !=null">
+                                    <dt>{{c.langage?c.langage.nom:c.framework.nom}}</dt>
+                                    <dd>niveau {{c.niveau.label}} et {{c.experience.label}} d'expériences</dd>
+                                    <!-- <dt *ngIf="c.framework.nom != null" >{{ c.framework?.nom }}</dt> -->
+                                    <!-- <dd *ngIf="c.framework.description != null" >{{ c.framework?.description}}</dd>  -->
+                                    <dt>Description</dt>
+                                    <dd *ngIf="c.framework?.description != null" >{{ c.framework?.description }}</dd> 
+                                    <dd *ngIf="c.framework?.description == null" >Non disponible</dd>  
+                                </dl>
+                        </li>                                       
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top:30px;">
+                <!-- <div> <a class="btn btn-default" [href]="service.baseUrl+'/cv?username='+candidatAfficher.username"> <i class="fa fa-file"></i> Télécharger le cv</a></div> -->
+                <!-- <div *ngIf="clickedCandidat.cvUrl==null" class="alert alert-warning">
+                    Pas de cv en piéce jointe
+                </div>
+                <div class="card" style="margin-top:10px;">
+                    <div class="content">
+                            <div class="form-group">
+                                    <label>
+                                            <i class="fa fa-comment-o"></i> Note
+                                    </label>
+                                    <textarea class="form-control" name="note" [(ngModel)]="clickedCandidat.note"></textarea>
+                                </div>
+                               <div style="text-align:center">
+                                    <button class="btn btn-fill btn-success" (click)="setCandidatNote()">Sauvegarder</button>
+                               </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()"><i class="fa fa-times"></i></button>
+      </div>
+</template>
+<template #envoyerInvitation>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Envoyer une invitation</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-warning" *ngIf="affiError">
+            Il est necessaire de Remplir tout les champs
+        </div>
+        <div class="form-group">
+            <label>Lieu</label>
+            <ng-select [items]="initValues" [multiple]="false"  style="z-index:1002;"
+                       bindLabel="nom"
+                       bindValue="id"
+                       placeholder="Lieu"
+                       [(ngModel)]="selectedLieuxId">
+            </ng-select>  
+        </div>
+        <!-- <div class="input-group">
+            <label>Date</label>
+            <input class="form-control" style="float:none" placeholder="chercher pour une date" ngx-mydatepicker name="mydate"
+                   [(ngModel)]="date" [options]="myOptions"  #dp="ngx-mydatepicker"  (dateChanged)="onDateChanged($event)"/>
+            
+            <span class="input-group-btn" style="padding-top:25px">
+                <button type="button" class="btn btn-default" (click)="dp.clearDate()">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+                <button type="button" class="btn btn-default" (click)="dp.toggleCalendar()">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>    -->
+        <div class="input-group">
+                <label>Date</label>
+                <input
+                class="form-control"
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                #dpFull="bsDatepicker"
+                placeholder="chercher pour une date"
+                [(ngModel)]="date"
+                bsDatepicker
+                [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD, h:mm:ss a' }"
+               >
+            <span class="input-group-btn" style="padding-top:25px">
+                    <button type="button" class="btn btn-default" (click)="clearDate(dpFull)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" (click)="openCal(dpFull)">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                </span>   
+        </div>
+        <div class="form-group">
+            <label>message</label>
+            <textarea  class="form-control" name="nom" [(ngModel)]="entretien.message"></textarea>
+        </div>
+      <div class="clearfix"></div>
+    </div>
+
+    
+    <div class="modal-footer">
+        <button class="btn btn-success " (click)="inviterEntretienDefinitif()">Envoyer</button>
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()">Annuler</button>
+    </div>
+</template>
+<template #accepteCandidat>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Accepté Candidat</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-warning">
+           Vous étés sur vous voulez invité ce candidat
+        </div>
+    </div>    
+    <div class="modal-footer">
+        <button class="btn btn-success " (click)="accepter()">Accepté</button>
+        <button type="button" class="btn btn-default" (click)="modalRef.hide()">Annuler</button>
+    </div>
+</template>

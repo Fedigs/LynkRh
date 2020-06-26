@@ -1,0 +1,48 @@
+<div class="auth-main" style="margin-top:300px;">
+  <div class="auth-block">
+    <h1 translate>
+      <div class="logo-img">
+        <img src="/assets/images/logo.png" style="width:170px">
+    </div>
+    </h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+      <div class="alert alert-warning" *ngIf="auth.rep==false">
+        {{auth.message}}
+      </div>
+      <div class="alert alert-danger" *ngIf="auth.rep==-1">
+        {{auth.message}}
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!username.valid && username.touched), 'has-success': (username.valid && username.touched)}">
+        <label for="inputEmail3" class="col-sm-3 control-label" translate>Nom d'utilisateur</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="username" type="text" class="form-control" id="inputEmail3" placeholder="nom d'utilisateur">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+        <label for="inputPassword3" class="col-sm-3 control-label" translate>{{'login.password'}}</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="password" type="password" class="form-control" id="inputPassword3" placeholder="mot de passe">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="offset-sm-3 col-sm-9">
+          <button [disabled]="!form.valid" type="submit" class="btn btn-default btn-auth" translate>Connecter</button>
+          <button routerLink="/register" class="btn btn-success" translate>resgister</button>
+          <a routerLink="/login" class="forgot-pass" translate>j'ai oublié mon mot de passe</a>
+        </div>
+      </div>
+    </form>
+
+    <div class="auth-sep"><span><span translate>Réseaux sociaux</span></span></div>
+
+    <div class="al-share-auth">
+      <ul class="al-share clearfix">
+        <li><i class="socicon socicon-facebook" title="{{'login.share_on_facebook' | translate}}"></i></li>
+        <li><i class="socicon socicon-twitter" title="{{'login.share_on_twitter' | translate}}"></i></li>
+        <li><i class="socicon socicon-google" title="{{'login.share_on_google_plus' | translate}}"></i></li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="auth-main" style="margin-top:400px">
+  <div class="auth-block">
+    <h1>
+        <img src="assets/images/logo.png">
+    </h1>
+    <div class="alert alert-warning" *ngIf="reponse.error==true">
+      <i class="fa fa-info"></i> {{reponse.candidat}}
+    </div>
+    <div class="alert alert-success" *ngIf="reponse.error==false">
+      <i class="ion-checkmark "></i> Merci d'être inscrit sur notre plateforme <button class="btn-sm btn btn-primary pull-right" style="margin-bottom:20px;"  routerLink="/login">Login</button>
+    </div>
+    <div class="clearfix"></div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+      <div class="form-group row" [ngClass]="{'has-error': (!nom.valid && nom.touched), 'has-success': (nom.valid && nom.touched)}">
+        <label for="inputName3" class="col-sm-3 control-label">Nom</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="nom" type="text" class="form-control" id="inputName3" placeholder="Nom">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!prenom.valid && prenom.touched), 'has-success': (prenom.valid && prenom.touched)}">
+        <label for="inputName4" class="col-sm-3 control-label">Prénom</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="prenom" type="text" class="form-control" id="inputName4" placeholder="Prénom">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!username.valid && username.touched), 'has-success': (username.valid && username.touched)}">
+        <label for="inputName5" class="col-sm-3 control-label">Nom d'utilisateur</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="username" type="text" class="form-control" id="inputName5" placeholder="Nom d'utilisateur">
+        </div>
+      </div>
+
+      <div class="form-group row" [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}">
+        <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="email" type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+        <label for="inputPassword3" class="col-sm-3 control-label">mot de passe</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!repeatPassword.valid && repeatPassword.touched), 'has-success': (repeatPassword.valid && repeatPassword.touched)}">
+        <label for="inputPassword4" class="col-sm-3 control-label">Repeter</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="repeatPassword" type="password" class="form-control" id="inputPassword4" placeholder="Repeat">
+          <span *ngIf="!passwords.valid && (password.touched || repeatPassword.touched)" class="help-block sub-little-text">Le mot de passe ne corresponde pas.</span>
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!adresse.valid && adresse.touched), 'has-success': (adresse.valid && adresse.touched)}">
+        <label for="inputAdresse4" class="col-sm-3 control-label">Adresse</label>
+
+        <div class="col-sm-9">
+<!--             <ng2-completer  [formControl]="adresse" [placeholder]="'adresse'" [dropdownClass]="'col-md-12'" [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer>
+ -->      <auto-completer [items]="lieux" [createAction]="true" ></auto-completer>
+</div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!tel.valid && tel.touched), 'has-success': (tel.valid && tel.touched)}">
+        <label for="inputTel4" class="col-sm-3 control-label">Tel</label>
+
+        <div class="col-sm-9">
+          <input [formControl]="tel" type="text" class="form-control" id="inputTel4" placeholder="Tel">
+        </div>
+      </div>
+      <div class="form-group row" [ngClass]="{'has-error': (!cv.valid && cv.touched), 'has-success': (cv.valid && tel.touched)}">
+        <label for="inputTel4" class="col-sm-3 control-label">CV</label>
+
+        <div class="col-sm-9">
+          <ba-file-uploader ></ba-file-uploader>
+        </div>
+      </div>
+
+
+      <div class="form-group row">
+        <div class="offset-sm-3 col-sm-9">
+          <button [disabled]="!form.valid" type="submit" class="btn btn-default btn-auth">S'inscrire</button>
+          <button routerLink="/login" class="btn btn-success" translate>Retour Login</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="auth-sep"><span><span>Réseaux sociaux</span></span></div>
+
+    <div class="al-share-auth">
+      <ul class="al-share clearfix">
+        <li><i class="socicon socicon-facebook" title="Share on Facebook"></i></li>
+        <li><i class="socicon socicon-twitter" title="Share on Twitter"></i></li>
+        <li><i class="socicon socicon-google" title="Share on Google Plus"></i></li>
+      </ul>
+    </div>
+  </div>
+</div>

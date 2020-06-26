@@ -1,0 +1,349 @@
+<div class="main-content" >
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Matching de cv</h4>
+                    </div>
+                    <div class="content">
+                            <div class="content all-icons">
+                                    <p><b>{{offre?.titre}}</b></p>
+                                    <div class="row">
+                            <div class="font-icon-list col-md-12">
+                                <div class="font-icon-detail" style="text-align: left; padding: 10px;">
+                                   <div class="row">
+                                        <div class="col-sm-6 col-md-4">
+                                                <fieldset>
+                                                    
+                                                        <!-- <div class="col-sm-12 col-md-6" *ngFor="let l of initValues.langages;let i=index;">
+                                                                <div class="checkbox">
+                                                                        <input  [id]="l.nom" type="checkbox" [(ngModel)]="initValues.langages[i].checked">
+                                                                        <label [for]="l.nom">
+                                                                            {{l.nom}}
+                                                                        </label>
+                                                                    </div>
+                                                        </div> -->
+                                                        <label>Langage</label>
+                                                        <ng-select [items]="initValues.langages" [multiple]="true"
+                                                                   bindLabel="nom"
+                                                                   bindValue="nom"
+                                                                   placeholder="Langage"
+                                                                   [(ngModel)]="selectedLangagesId">
+                                                        </ng-select>
+                                                        
+                                                    </fieldset>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                                <fieldset>
+
+                                                        <label>Langage</label>
+                                                        <ng-select [items]="initValues.frameworks" [multiple]="true"
+                                                                   bindLabel="nom"
+                                                                   bindValue="nom"
+                                                                   placeholder="Framework"
+                                                                   [(ngModel)]="selectedFrameworksId">
+                                                        </ng-select>
+                                                    </fieldset>
+                                        </div>
+                                        <div class="col-sm-6 col-md-4">
+                                                <fieldset>
+                                                    <label>Contrat</label>
+                                                    <ng-select [items]="initValues.typeContrat" [multiple]="true"
+                                                               bindLabel="nom"
+                                                               bindValue="nom"
+                                                               placeholder="Contrat"
+                                                               [(ngModel)]="selectedContratsId">
+                                                    </ng-select>
+                                                    </fieldset>
+                                        </div>
+                                        <div style="text-align: center;">
+                                                Régle de calcul<i class="fa fa-question"
+                                                tooltip="
+                                                Le calcul du score suit la régle suivante:
+                                                - Le contrat est pondéré à 50 : donc le score total du contrat sera le nombre d'élément coché multiplié par 50, donc si un candidat posséde 3 type de contrat et si la recherche indique ces 3 derniers , le candidat aura 3*50 comme score;
+                                                - Les frameworks et les langages sont pondérés respectivement par 60 et 40: la régle de calcul pour ces dernieres est particuliére , 
+                                                si par exemple le langage java est coché , le serveur récupere les candidats possédant java comme compéténce puis calcul un score pour chacun des candidats comme suite:
+                                                  - (50*(niveau+experience)) , à savoir que les niveaux et les experiences sont numéro respectivement de (1-5) et (1-10) , c'est à dire plus un candidat à un niveau ou une expérience élevé plus son score est important.
+                                                ">
+                                               </i>
+                                        </div>
+                                        <div style="margin-right:20px;margin-left:20px;">
+                                            <div class="form-inline pull-left">
+                                                <label class="label">Nombre max de cv </label>
+                                                <select class="form-control" name="size" [(ngModel)]="critere.size">
+                                                    <option>10</option>
+                                                    <option>20</option>
+                                                    <option>30</option>
+                                                    <option>40</option>
+                                                    <option>50</option>
+                                                    <option>60</option>
+                                                    <option>70</option>
+                                                    <option>80</option>
+                                                    <option>90</option>
+                                                    <option>100</option>
+                                                </select>
+                                            </div>
+                                            
+                                               <div class="pull-right">
+                                                    
+                                                    <button class="btn btn-success btn-fill" (click)="rechercher()" [disabled]="offre?.status==2">
+                                                            Rechercher
+                                                        </button>
+                                               </div>
+                                               </div>
+                                        </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="alert alert-warning" *ngIf="offre?.status==2">
+                        Cet offre est cloturée 
+                    </div>
+                    <div class="row">
+                            <table class="table table-bordered table-striped" style="margin-top:25px;font-size:13px; ">
+                                    <thead>
+                                      <tr>
+                                          <th style="width:15%;">
+                                                    <select class="form-control" #action (change)="doAction(action.value)">
+                                                            <option value="0"> Aucune action</option>
+                                                            <option value="1"> Sélectionner tous</option>
+                                                            <option value="2"> Faire un test</option>
+                                                        </select>
+                                          </th>
+                                          <th>Nom</th>
+                                          <th>Prénom</th>
+                                          <th>Adresse</th>
+                                          <th>Score</th>
+                                          <th>Actions</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let c of candidats;let i=index">
+                                            <td><div class="checkbox1">
+                                                    <input type="checkbox" name="checkbox" [(ngModel)]="c.checked">    
+                                            </div></td>
+                                            <td>{{c.nom}}</td>
+                                            <td>{{c.prenom}}</td>
+                                            <td>{{c.adresse}}</td>
+                                            <td>    
+                                                        {{c.score}}
+                                            </td>
+                                            <td>
+                                                <ng-template #tolTemplate>
+                                                        <div class="card">
+                                                                <div class="content">
+                                                    <canvas baseChart
+                                                    [data]="doughnutChartData"
+                                                    [labels]="doughnutChartLabels"
+                                                    [chartType]="doughnutChartType"
+                                                    (chartHover)="chartHovered($event)"
+                                                    (chartClick)="chartClicked($event)"></canvas>
+                                                    <div>
+                                                        <table class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td><label >Nom</label></td>
+                                                                    <td><label >Score</label></td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label>Contrat</label></td>
+                                                                    <td><label>{{totalContrat}}/{{totalContrats}}</label>
+                                                                        <div class="progress">
+                                                                                <div aria-valuemax="100" aria-valuemin="0" [attr.aria-valuenow]="c.score" class="progress-bar" role="progressbar" [ngStyle]="{'width':(totalContrat/totalContrats)*100+'%'}">
+                                                                                    
+                                                                                </div>
+                                                                            </div></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Frameworks</label></td>
+                                                                    <td><label>{{totalFramework}}/{{totalFrameworks}}</label>
+                                                                        <div class="progress">
+                                                                                <div aria-valuemax="100" aria-valuemin="0" [attr.aria-valuenow]="c.score" class="progress-bar" role="progressbar" [ngStyle]="{'width':(totalFramework/totalFrameworks)*100+'%'}">
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Langages</label></td>
+                                                                    <td><label>{{totalLangage}}/{{totalLangages}}</label>
+                                                                        <div class="progress">
+                                                                                <div aria-valuemax="100" aria-valuemin="0" [attr.aria-valuenow]="c.score" class="progress-bar" role="progressbar" [ngStyle]="{'width':(totalLangage/totalLangages)*100+'%'}">
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label>Total</label></td>
+                                                                    <td><label>{{(totalContrat+totalFramework+totalLangage)}}/{{(totalContrats+totalFrameworks+totalLangages)}}</label>
+                                                                        <div class="progress">
+                                                                                <div aria-valuemax="100" aria-valuemin="0" [attr.aria-valuenow]="c.score" class="progress-bar" role="progressbar" [ngStyle]="{'width':((totalContrat+totalFramework+totalLangage)/(totalContrats+totalFrameworks+totalLangages))*100+'%'}">
+                                                                                    
+                                                                                </div>
+                                                                            </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                    <div class="clearfix"></div>
+                                                </ng-template>
+                                                <!-- <button type="button" class="btn btn-success" (mouseenter)="setChart(c)" [tooltip]="tolTemplate" triggers="focus" placement="left">
+                                                  Details
+                                                </button> -->
+                                                <i class="fa fa-book" style="cursor: pointer" data-toggle="modal" data-target="#myModal" (click)="displayCv(i)"></i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                            </table>
+                    </div>
+                    <template #offreModal>
+                            <div class="modal-header">
+                              <h4 class="modal-title pull-left">Offre</h4>
+                            </div>
+                            <div class="modal-body">
+                              <div class="containe">
+                                <div class="form-group">
+                                                <label class="control-label">Nom </label>
+                                                <input class="form-control" >
+                                </div>
+                                <div class="form-group">
+                                                    <label class="control-label">Offres</label>
+                                                    <textarea class="form-control"></textarea>
+                                </div>
+                                <button class="btn btn-fill btn-success">Valider</button>
+                                <div class="clearfix"></div> 
+                              </div>
+                              
+                              <div class="modal-footer">
+                                  
+                                    <button type="button" class="btn btn-default" (click)="modalRef.hide()">Fermer</button>
+                                  </div>
+                              
+                            </div>
+                          </template>
+
+                          
+                    <template #cvModal>
+                        <div class="modal-body ">
+                            <div class="row cv-info-perso">
+                                <div class="container">
+                                        <div class="col-md-2">
+                                                <img alt="..." class="avatar border-gray" src="../../assets/img/default-avatar.png" *ngIf="clickedCandidat.photoUrl==null">
+                                                <img alt="..." class="avatar border-gray" *ngIf="clickedCandidat.photoUrl!=null" class="img-responsive" [src]="service.baseUrl+'/image?photo='+clickedCandidat.photoUrl">
+                                        </div>
+                                        <div class="col-md-10">
+                                           <div class="container">
+                                                <h2 style><b>{{clickedCandidat.nom+" "+clickedCandidat.prenom}}</b></h2>
+                                                <p>
+                                                        <i class="fa fa-map-marker" aria-hidden="true"></i> {{clickedCandidat.adresse}}
+                                                  </p>
+                                                  <p>
+                                                        <i class="fa fa-envelope" aria-hidden="true"></i> {{clickedCandidat.email}}
+                                                  </p>
+                                                  <p>
+                                                        <b><i class="fa fa-phone" aria-hidden="true"></i>{{clickedCandidat.tel}}</b>                                                       
+                                                  </p>
+                                           </div>
+                                        </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-md-9" style="margin-top:20px;">
+                                    <h3><b>RESUME DU CV EN LIGNE</b></h3>
+                                    <div class="label label-success" *ngIf="checkedTypeContrat('CDD')">CDD</div>
+                                    <div class="label label-primary" *ngIf="checkedTypeContrat('CDI')">CDI</div>
+                                    <div class="label label-info" *ngIf="checkedTypeContrat('SVIP1')">SVIP1</div>
+                                    <div class="label label-default" *ngIf="checkedTypeContrat('SVIP2')">SVIP2</div>
+                                    <div class="label label-danger" *ngIf="checkedTypeContrat('STAGE')">STAGE</div>
+                                    <div class="alert alert-warning" *ngIf="!checkedTypeContrat('CDD')&&!checkedTypeContrat('CDI')&&!checkedTypeContrat('SVIP1')&&!checkedTypeContrat('SVIP2')&&!checkedTypeContrat('FREELANCE')&&!checkedTypeContrat('STAGE')">
+                                        Aucun type de contrat dans ce cv
+                                    </div>
+                                    <div style="margin-top:20px"  *ngIf="checkedTypeContrat('CDD')||checkedTypeContrat('CDI')||checkedTypeContrat('SVIP1')||checkedTypeContrat('SVIP2')">
+                                        <h4 class="cv-element-titre"><b>TYPE SALARIE</b></h4>
+                                        <dl class="dl-horizontal">
+                                                <dt>Salaire mensuel</dt>
+                                                <dd>{{clickedCandidat.contratSalarie.salaireMensuel}} <small>dt</small></dd>
+                                                <dt>Date de disponibilité</dt>
+                                                <dd>{{clickedCandidat.contratSalarie.disponibilite| date:'yyyy-MM-dd'}}</dd>
+                                            </dl>
+                                    </div>
+                                    <div style="margin-top:20px" *ngIf="checkedTypeContrat('FREELANCE')">
+                                        <h4 class="cv-element-titre"><b>TYPE FREELANCE</b></h4>
+                                        <dl class="dl-horizontal">
+                                                <dt>Salaire journalier</dt>
+                                                <dd>{{clickedCandidat.contratSalarie.salaireJournalier}} <small>dt</small></dd>
+                                                <dt>Type de freelance</dt>
+                                                <dd>{{clickedCandidat.contratFreelance.typeFreelance}}</dd>
+                                                <dt>Lieu de travail</dt>
+                                                <dd>{{clickedCandidat.contratFreelance.lieuTravail}}</dd>
+                                                <dt>Date de disponibilité</dt>
+                                                <dd>{{clickedCandidat.contratFreelance.disponibilite| date:'yyyy-MM-dd'}}</dd>
+                                            </dl>
+                                    </div>
+                                    <div style="margin-top:20px" *ngIf="checkedTypeContrat('STAGE')">
+                                        <h4 class="cv-element-titre"><b>STAGE</b></h4>
+                                        <dl class="dl-horizontal">
+                                                <dt>Date de début</dt>
+                                                <dd>{{clickedCandidat.contratStage.disponibilite| date:'yyyy-MM-dd'}}</dd>
+                                                <dt>Durée</dt>
+                                                <dd>{{clickedCandidat.contratStage.nbMois}}</dd>
+                                            </dl>
+                                    </div>
+                                    <div style="margin-top:20px">
+                                        <h4 class="cv-element-titre"><b>COMPETENCES</b></h4>
+                                        <div class="alert alert-warning" *ngIf="clickedCandidat.competences.length==0">
+                                            Aucune compétences dans ce cv
+                                        </div>
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let c of clickedCandidat.competences">
+                                                    <dl class="dl-horizontal">
+                                                            <dt>{{c.langage?c.langage.nom:c.framework.nom}}</dt>
+                                                            <dd>niveau {{c.niveau.label}} et {{c.experience.label}} d'expériences</dd>
+                                                        </dl>
+                                            </li>                                       
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="margin-top:30px;">
+                                    <div *ngIf="clickedCandidat.cvUrl!=null"> <a class="btn btn-default" [href]="service.baseUrl+'/cv?username='+clickedCandidat.username"> <i class="fa fa-file"></i> Télécharger le cv</a></div>
+                                    <div *ngIf="clickedCandidat.cvUrl==null" class="alert alert-warning">
+                                        Pas de cv en piéce jointe
+                                    </div>
+                                    <div class="card" style="margin-top:10px;">
+                                        <div class="content">
+                                                <div class="form-group">
+                                                        <label>
+                                                                <i class="fa fa-comment-o"></i> Note
+                                                        </label>
+                                                        <textarea class="form-control" name="note" [(ngModel)]="clickedCandidat.note"></textarea>
+                                                    </div>
+                                                   <div style="text-align:center">
+                                                        <button class="btn btn-fill btn-success" (click)="setCandidatNote()">Sauvegarder</button>
+                                                   </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" (click)="modalRef.hide()"><i class="fa fa-times"></i></button>
+                          </div>
+                      </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
